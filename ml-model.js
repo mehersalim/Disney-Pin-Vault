@@ -1,7 +1,8 @@
 /**
- * ML MODEL - AI PIN RECOGNITION
- * ==============================
- * 
+ * Developer: Meher salim
+ * File: ml-model.js
+ * Description:
+ * ML Model - AI Pin Recognition
  * This file handles AI-powered pin identification using TensorFlow.js
  * and the MobileNet pre-trained model.
  * 
