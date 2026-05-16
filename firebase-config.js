@@ -3,8 +3,6 @@
  * File: firebase-config.js
  * Description:
  * FIREBASE CONFIGURATION
- * ======================
- * 
  * IMPORTANT: Replace this with YOUR Firebase project configuration!
  * 
  * HOW TO SET UP FIREBASE:
