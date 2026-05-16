@@ -1,7 +1,8 @@
 /**
- * DISNEY PIN COLLECTOR APP - COMPLETE MAIN APPLICATION
- * ====================================================
- * 
+ * Developer: Meher Salim
+ * File: script.js
+ * Description:
+ * Disney Pin Vault - Complete Main Application
  * This file contains ALL the application logic combining Phases 1-4:
  * 
  * PHASE 1: Basic CRUD + Local Storage
@@ -25,9 +26,6 @@
  * - Integration with AI recognizer
  * - Analytics dashboard charts
  * - Marketplace price checking
- * 
- * @version 4.0.0
- * @author Disney Pin Collector Tutorial
  * @license MIT
  */
 
