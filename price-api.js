@@ -1,7 +1,8 @@
 /**
- * PRICE API - eBay and Mercari Integration
- * ==========================================
- * 
+ * Developer: Meher Salim
+ * File: price-api.js
+ * Description:
+ * Price API - eBay and Mercari Integration
  * This file handles marketplace price checking and historical data.
  * 
  * NOTE: This is a MOCK implementation for learning/demo purposes.
