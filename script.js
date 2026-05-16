@@ -26,6 +26,8 @@
  * - Integration with AI recognizer
  * - Analytics dashboard charts
  * - Marketplace price checking
+ * 
+ * @version 4.0.0
  * @license MIT
  */
 
