@@ -1,4 +1,7 @@
 /**
+ * Developer: Meher Salim
+ * File: firebase-config.js
+ * Description:
  * FIREBASE CONFIGURATION
  * ======================
  * 
