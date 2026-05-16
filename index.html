@@ -4,12 +4,13 @@
   File: index.html
   Description:
   This is the main HTML file for the Disney Pin Vault application.
-  It combines ALL phases:
-  
-  Phase 1: Basic CRUD + Local Storage
-  Phase 2: Tags, Search, Import/Export, Image Upload
-  Phase 3: Firebase Auth, Cloud Sync, Trading System
-  Phase 4: AI Scanner, Analytics, Marketplace Integration
+  It combines all phases and Guest Mode:
+
+  - Phase 1: Basic CRUD + Local Storage
+  - Phase 2: Tags, Search, Import/Export, Image Upload
+  - Phase 3: Firebase Auth, Cloud Sync, Trading System
+  - Phase 4: AI Scanner, Analytics Dashboard, Marketplace Integration
+  - NEW: Guest Mode - Try without signing up!
   
   Every feature is documented and ready to use.
 -->
@@ -27,6 +28,11 @@
       EXTERNAL LIBRARIES
       ==================
       These are all the third-party libraries we use:
+      - Firebase: Cloud database, authentication, storage
+      - TensorFlow.js: AI image recognition
+      - Chart.js: Analytics visualizations
+      - QR Scanner: Barcode/QR code scanning
+      - Day.js: Date manipulation
     -->
     
     <!-- Firebase SDK (Phase 3 - Cloud & Auth) -->
@@ -54,13 +60,13 @@
 <body>
     
     <!-- ============================================ -->
-    <!-- AUTHENTICATION MODAL (Phase 3)                -->
+    <!-- AUTHENTICATION MODAL (Phase 3 + Guest Mode)  -->
     <!-- Shows when user is not logged in             -->
     <!-- ============================================ -->
     <div id="authModal" class="modal" style="display: flex;">
         <div class="modal-content auth-modal">
             <div class="auth-header">
-                <h1>Disney Pin Vault</h1>
+                <h1>🏰 Disney Pin Vault</h1>
                 <p>Track, Trade, and Treasure Your Collection</p>
             </div>
             
@@ -86,22 +92,24 @@
                 </div>
             </div>
             
+            <!-- Guest button will be added by JavaScript dynamically -->
+            
             <div class="auth-features">
                 <p>✨ Features include:</p>
                 <ul>
-                    <li>Track pins you own, want, or have for trade</li>
-                    <li>AI image recognition to identify pins</li>
-                    <li>Analytics dashboard with value tracking</li>
-                    <li>Live eBay & Mercari price checks</li>
-                    <li>Trade with other collectors</li>
-                    <li>Cloud sync across all devices</li>
+                    <li>📌 Track pins you own, want, or have for trade</li>
+                    <li>🤖 AI image recognition to identify pins</li>
+                    <li>📊 Analytics dashboard with value tracking</li>
+                    <li>🛒 Live eBay & Mercari price checks</li>
+                    <li>🎮 <strong>Try instantly as Guest - no signup required!</strong></li>
+                    <li>☁️ Create account to sync across all devices</li>
                 </ul>
             </div>
         </div>
     </div>
     
     <!-- ============================================ -->
-    <!-- MAIN APPLICATION (shown after login)         -->
+    <!-- MAIN APPLICATION (shown after login/guest)   -->
     <!-- ============================================ -->
     <div id="appContent" style="display: none;">
         
