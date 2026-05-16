@@ -1,7 +1,7 @@
 /**
- * CHART CONFIGURATION - Analytics Dashboard
- * ==========================================
- * 
+ * Developer: Meher Salim
+ * File: chart-config.js
+ * Description:
  * This file handles all Chart.js visualizations for the analytics dashboard.
  * Uses Chart.js library for rendering charts.
  * 
