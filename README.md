@@ -54,7 +54,7 @@ A full-featured web application for Disney pin collectors to track, trade, and t
 
 ## Live Demo
 
-[Add your deployed link here after deployment]
+https://mehersalim.github.io/Disney-Pin-Vault/
 
 ## Screenshots
 
