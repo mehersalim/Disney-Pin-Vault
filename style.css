@@ -61,6 +61,165 @@ body {
 }
 
 /* ============================================ */
+/* GUEST MODE STYLES                            */
+/* ============================================ */
+
+/* Guest Button */
+.btn-guest {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin: 10px 0;
+    transition: all 0.3s ease;
+}
+
+.btn-guest:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+}
+
+/* Auth Separator */
+.auth-separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--gray-dark);
+    font-size: 12px;
+    margin: 15px 0;
+}
+
+.auth-separator::before,
+.auth-separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--gray-medium);
+}
+
+.auth-separator span {
+    margin: 0 10px;
+}
+
+/* Guest Badge */
+.guest-badge {
+    background: #17a2b8;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Guest Upgrade Prompt */
+.guest-upgrade-prompt {
+    margin-bottom: 20px;
+    animation: slideDown 0.3s ease;
+}
+
+.upgrade-card {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.upgrade-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.upgrade-card h4 {
+    color: white;
+    margin-bottom: 8px;
+}
+
+.upgrade-card p {
+    font-size: 13px;
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+
+.btn-upgrade {
+    background: white;
+    color: #764ba2;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: all 0.2s;
+}
+
+.btn-upgrade:hover {
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.btn-dismiss {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 8px 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn-dismiss:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* Guest Feature Message */
+.guest-feature-message {
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--gray-light);
+    border-radius: var(--border-radius);
+}
+
+.feature-lock-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.guest-feature-message h3 {
+    margin-bottom: 15px;
+    color: var(--primary-dark);
+}
+
+.guest-feature-message ul {
+    text-align: left;
+    display: inline-block;
+    margin: 15px 0;
+    list-style: none;
+}
+
+.guest-feature-message li {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+/* Update stats for guest mode */
+.sync-status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+}
+
+/* ============================================ */
 /* TYPOGRAPHY                                   */
 /* ============================================ */
 
