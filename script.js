@@ -27,7 +27,12 @@
  * - Analytics dashboard charts
  * - Marketplace price checking
  * 
- * @version 4.0.0
+ * NEW FEATURE: Guest User Mode
+ * - Users can explore the app without signing up
+ * - Guest data is stored in localStorage (not synced to cloud)
+ * - Option to convert guest account to full account
+ *
+ * @version 4.1.0
  * @license MIT
  */
 
@@ -36,6 +41,7 @@
 // ============================================
 
 let currentUser = null;              // Currently logged in user
+let isGuestMode = false;             // Whether user is in guest mode
 let pinsDatabase = [];               // Array of all pins
 let currentFilter = 'all';           // Current status filter (all/own/trade/iso)
 let currentSearchTerm = '';          // Current search query
@@ -53,7 +59,7 @@ let currentTradeTarget = null;       // User ID for pending trade
  * Called when DOM is ready and Firebase is loaded
  */
 async function initializeApp() {
-    console.log('🚀 Disney Pin Vault starting up...');
+    console.log('🚀 Disney Pin Vault v4.1.0 starting up...');
     showLoadingOverlay(true);
     
     try {
@@ -69,6 +75,9 @@ async function initializeApp() {
         // Set up marketplace tabs
         setupMarketplaceTabs();
         
+        // Check for existing guest data
+        checkForGuestData();
+        
         console.log('✅ Application initialized successfully');
     } catch (error) {
         console.error('❌ Initialization error:', error);
@@ -79,14 +88,29 @@ async function initializeApp() {
 }
 
 /**
+ * Check if there's existing guest data in localStorage
+ */
+function checkForGuestData() {
+    const savedGuestData = localStorage.getItem('disneyPins_guest');
+    if (savedGuestData) {
+        console.log('📀 Found existing guest data');
+    }
+}
+
+/**
  * Set up Firebase authentication state listener
  * This runs whenever auth state changes (login/logout)
  */
 function setupAuthListener() {
     auth.onAuthStateChanged(async (user) => {
         if (user) {
-            // User is logged in
+            // Real user is logged in - exit guest mode if active
+            if (isGuestMode) {
+                await migrateGuestDataToUser(user);
+            }
+            
             currentUser = user;
+            isGuestMode = false;
             console.log('✅ User logged in:', user.email);
             
             // Update UI with user info
@@ -112,32 +136,352 @@ function setupAuthListener() {
                 });
             }
             
-        } else {
-            // User is logged out
-            console.log('👤 No user logged in');
-            currentUser = null;
-            
-            // Clean up listeners
-            if (unsubscribePins) {
-                unsubscribePins();
-                unsubscribePins = null;
-            }
-            if (unsubscribeTrades) {
-                unsubscribeTrades();
-                unsubscribeTrades = null;
-            }
-            
-            // Clear local data
-            pinsDatabase = [];
-            
-            // Show auth modal, hide app
-            document.getElementById('authModal').style.display = 'flex';
-            document.getElementById('appContent').style.display = 'none';
-            
-            // Reset sync status
-            updateSyncStatus('disconnected');
+        } else if (!isGuestMode) {
+            // No real user and not in guest mode - show auth options with guest button
+            console.log('👤 No user logged in, showing guest option');
+            showAuthModalWithGuestOption();
         }
     });
+}
+
+/**
+ * Show authentication modal with guest option
+ */
+function showAuthModalWithGuestOption() {
+    const modal = document.getElementById('authModal');
+    const content = document.getElementById('authForms');
+    
+    if (!modal || !content) return;
+    
+    // Add guest button if not already present
+    const existingGuestBtn = document.getElementById('guestModeBtn');
+    if (!existingGuestBtn) {
+        const guestButton = document.createElement('button');
+        guestButton.id = 'guestModeBtn';
+        guestButton.className = 'btn-guest';
+        guestButton.innerHTML = '🎮 Continue as Guest';
+        guestButton.onclick = startGuestMode;
+        
+        // Insert after the auth forms
+        content.parentNode.insertBefore(guestButton, content.nextSibling);
+        
+        // Add some spacing and separator
+        const separator = document.createElement('div');
+        separator.className = 'auth-separator';
+        separator.innerHTML = '<span>or</span>';
+        content.parentNode.insertBefore(separator, guestButton);
+    }
+    
+    modal.style.display = 'flex';
+    document.getElementById('appContent').style.display = 'none';
+    
+    // Clear any existing pins
+    pinsDatabase = [];
+    refreshAllUI();
+}
+
+/**
+ * Start guest mode
+ * Allows users to explore the app without signing up
+ */
+async function startGuestMode() {
+    console.log('🎮 Starting guest mode...');
+    showLoadingOverlay(true);
+    
+    try {
+        isGuestMode = true;
+        currentUser = null;
+        
+        // Hide auth modal, show app
+        document.getElementById('authModal').style.display = 'none';
+        document.getElementById('appContent').style.display = 'block';
+        
+        // Update UI for guest mode
+        updateGuestModeUI();
+        
+        // Load guest data from localStorage
+        await loadGuestPins();
+        
+        // Update sync status for guest mode
+        updateSyncStatus('guest');
+        
+        // Pre-load AI model in background
+        if (pinRecognizer && !pinRecognizer.isModelReady) {
+            pinRecognizer.loadModel().catch(err => console.warn(err));
+        }
+        
+        showNotification('🎮 You are in Guest Mode. Create an account to save your collection to the cloud!', 'info');
+        
+    } catch (error) {
+        console.error('Guest mode error:', error);
+        showNotification('Failed to start guest mode', 'error');
+    } finally {
+        showLoadingOverlay(false);
+    }
+}
+
+/**
+ * Update UI for guest mode
+ */
+function updateGuestModeUI() {
+    // Update user info display
+    document.getElementById('userName').textContent = 'Guest User';
+    document.getElementById('userAvatar').src = 'https://via.placeholder.com/40?text=👤';
+    
+    // Add guest indicator badge
+    const headerRight = document.querySelector('.header-right');
+    let guestBadge = document.getElementById('guestBadge');
+    
+    if (!guestBadge) {
+        guestBadge = document.createElement('div');
+        guestBadge.id = 'guestBadge';
+        guestBadge.className = 'guest-badge';
+        guestBadge.innerHTML = '🎮 Guest Mode';
+        headerRight.insertBefore(guestBadge, headerRight.firstChild);
+    }
+    
+    // Add upgrade button to sidebar
+    addUpgradePrompt();
+    
+    // Disable trade features (require account)
+    disableTradeFeaturesForGuest();
+}
+
+/**
+ * Add upgrade prompt to sidebar for guest users
+ */
+function addUpgradePrompt() {
+    const sidebar = document.querySelector('.add-pin-form');
+    let upgradePrompt = document.getElementById('guestUpgradePrompt');
+    
+    if (upgradePrompt) return;
+    
+    upgradePrompt = document.createElement('div');
+    upgradePrompt.id = 'guestUpgradePrompt';
+    upgradePrompt.className = 'guest-upgrade-prompt';
+    upgradePrompt.innerHTML = `
+        <div class="upgrade-card">
+            <span class="upgrade-icon">☁️</span>
+            <h4>Save Your Collection to the Cloud!</h4>
+            <p>Create a free account to sync across devices, trade with others, and never lose your pins.</p>
+            <button id="upgradeFromGuestBtn" class="btn-upgrade">Create Free Account →</button>
+            <button id="dismissUpgradeBtn" class="btn-dismiss">Remind Me Later</button>
+        </div>
+    `;
+    
+    // Insert at the top of the sidebar
+    sidebar.insertBefore(upgradePrompt, sidebar.firstChild);
+    
+    document.getElementById('upgradeFromGuestBtn')?.addEventListener('click', () => {
+        showAuthModalWithGuestOption();
+    });
+    
+    document.getElementById('dismissUpgradeBtn')?.addEventListener('click', () => {
+        upgradePrompt.style.display = 'none';
+        localStorage.setItem('guestUpgradeDismissed', Date.now());
+    });
+}
+
+/**
+ * Disable trade features for guest users
+ */
+function disableTradeFeaturesForGuest() {
+    // Disable trade tabs
+    const tradeTab = document.querySelector('[data-tab="trade"]');
+    const offersTab = document.querySelector('[data-tab="offers"]');
+    
+    if (tradeTab) {
+        tradeTab.style.opacity = '0.5';
+        tradeTab.style.cursor = 'not-allowed';
+        tradeTab.title = 'Create an account to use trading features';
+        tradeTab.disabled = true;
+    }
+    
+    if (offersTab) {
+        offersTab.style.opacity = '0.5';
+        offersTab.style.cursor = 'not-allowed';
+        offersTab.title = 'Create an account to use trading features';
+        offersTab.disabled = true;
+    }
+    
+    // Update trade content to show upgrade message
+    const tradeContent = document.getElementById('tradeTab');
+    const offersContent = document.getElementById('offersTab');
+    
+    if (tradeContent && !tradeContent.querySelector('.guest-trade-message')) {
+        tradeContent.innerHTML = `
+            <div class="guest-feature-message">
+                <span class="feature-lock-icon">🔒</span>
+                <h3>Trading Features Require an Account</h3>
+                <p>Create a free account to:</p>
+                <ul>
+                    <li>🤝 Trade with other collectors</li>
+                    <li>📨 Send and receive trade offers</li>
+                    <li>🔍 Find matches for your ISO pins</li>
+                </ul>
+                <button onclick="showAuthModalWithGuestOption()" class="btn-primary">Create Free Account</button>
+            </div>
+        `;
+    }
+    
+    if (offersContent && !offersContent.querySelector('.guest-trade-message')) {
+        offersContent.innerHTML = `
+            <div class="guest-feature-message">
+                <span class="feature-lock-icon">🔒</span>
+                <h3>Trade Offers Require an Account</h3>
+                <p>Sign up to see and respond to trade offers!</p>
+                <button onclick="showAuthModalWithGuestOption()" class="btn-primary">Create Free Account</button>
+            </div>
+        `;
+    }
+}
+
+/**
+ * Load guest pins from localStorage
+ */
+async function loadGuestPins() {
+    const savedPins = localStorage.getItem('disneyPins_guest');
+    
+    if (savedPins) {
+        try {
+            pinsDatabase = JSON.parse(savedPins);
+            console.log(`📀 Loaded ${pinsDatabase.length} pins from guest storage`);
+        } catch (e) {
+            console.error('Failed to parse guest data:', e);
+            pinsDatabase = [];
+        }
+    } else {
+        // Create sample data for new guest users
+        pinsDatabase = getSampleGuestData();
+        saveGuestPins();
+        console.log('✨ Created sample data for guest user');
+    }
+    
+    refreshAllUI();
+}
+
+/**
+ * Save guest pins to localStorage
+ */
+function saveGuestPins() {
+    if (isGuestMode) {
+        localStorage.setItem('disneyPins_guest', JSON.stringify(pinsDatabase));
+        console.log('💾 Guest pins saved to localStorage');
+    }
+}
+
+/**
+ * Get sample data for guest users
+ */
+function getSampleGuestData() {
+    return [
+        {
+            id: Date.now() + 1,
+            name: "Stitch Surfing Hawaii (Sample)",
+            collection: "Stitch's Aloha Adventure",
+            series: "Beach Break Series",
+            pinNumber: 3,
+            totalInSeries: 6,
+            editionSize: "LE 1500",
+            releaseDate: "2023-07-10",
+            origin: "Aulani Resort",
+            originalPrice: 16.99,
+            currentValue: 72.50,
+            rarity: "Rare",
+            status: "own",
+            purchasePrice: 45.00,
+            conditionNotes: "Mint condition, original backing card",
+            tags: ["Stitch", "Hawaii", "Surf", "Summer", "LE"],
+            imageUrl: "https://via.placeholder.com/200x200/764ba2/white?text=Stitch+Sample",
+            confirmedFakes: false,
+            fakeNotes: "",
+            dateAdded: new Date().toISOString()
+        },
+        {
+            id: Date.now() + 2,
+            name: "Halloween Mickey (Sample)",
+            collection: "Seasonal Series",
+            series: "Halloween 2024",
+            pinNumber: 1,
+            totalInSeries: 4,
+            editionSize: "Open Edition",
+            releaseDate: "2024-09-01",
+            origin: "Disneyland California",
+            originalPrice: 12.99,
+            currentValue: 15.00,
+            rarity: "Common",
+            status: "own",
+            purchasePrice: 12.99,
+            conditionNotes: "New in package",
+            tags: ["Mickey", "Halloween", "Holiday", "Pumpkin"],
+            imageUrl: "https://via.placeholder.com/200x200/ff6b6b/white?text=Mickey+Sample",
+            confirmedFakes: false,
+            fakeNotes: "",
+            dateAdded: new Date().toISOString()
+        },
+        {
+            id: Date.now() + 3,
+            name: "Princess Jasmine Chaser (Sample)",
+            collection: "Princess Carousel",
+            series: "Chaser Series",
+            pinNumber: 5,
+            totalInSeries: 8,
+            editionSize: "LE 500",
+            releaseDate: "2024-03-15",
+            origin: "ShopDisney",
+            originalPrice: 19.99,
+            currentValue: 125.00,
+            rarity: "Super Rare",
+            status: "iso",
+            purchasePrice: 0,
+            conditionNotes: "",
+            tags: ["Jasmine", "Princess", "Chaser", "Grail", "LE500"],
+            imageUrl: "https://via.placeholder.com/200x200/ffd700/white?text=Jasmine+Sample",
+            confirmedFakes: true,
+            fakeNotes: "Many fakes on eBay - check for glitter eyes",
+            dateAdded: new Date().toISOString()
+        }
+    ];
+}
+
+/**
+ * Migrate guest data to a real user account
+ * @param {firebase.User} user - The authenticated user
+ */
+async function migrateGuestDataToUser(user) {
+    if (!user || pinsDatabase.length === 0) return;
+    
+    console.log(`🔄 Migrating ${pinsDatabase.length} pins from guest to user ${user.uid}`);
+    showLoadingOverlay(true);
+    
+    let successCount = 0;
+    
+    for (const pin of pinsDatabase) {
+        try {
+            const pinData = { ...pin };
+            delete pinData.id;
+            pinData.userId = user.uid;
+            pinData.migratedFromGuest = true;
+            
+            await db.collection('users')
+                .doc(user.uid)
+                .collection('pins')
+                .doc(pin.id.toString())
+                .set(pinData);
+            
+            successCount++;
+        } catch (error) {
+            console.error('Migration error for pin:', pin.name, error);
+        }
+    }
+    
+    // Clear guest data after successful migration
+    if (successCount > 0) {
+        localStorage.removeItem('disneyPins_guest');
+        showNotification(`✅ Migrated ${successCount} pins to your account!`, 'success');
+    }
+    
+    showLoadingOverlay(false);
 }
 
 /**
@@ -153,11 +497,85 @@ function updateUserInterface(user) {
     } else {
         document.getElementById('userAvatar').src = 'https://via.placeholder.com/40?text=' + userName.charAt(0).toUpperCase();
     }
+    
+    // Remove guest badge if exists
+    const guestBadge = document.getElementById('guestBadge');
+    if (guestBadge) guestBadge.remove();
+    
+    // Remove upgrade prompt if exists
+    const upgradePrompt = document.getElementById('guestUpgradePrompt');
+    if (upgradePrompt) upgradePrompt.remove();
+    
+    // Re-enable trade features
+    enableTradeFeatures();
+}
+
+/**
+ * Enable trade features for authenticated users
+ */
+function enableTradeFeatures() {
+    const tradeTab = document.querySelector('[data-tab="trade"]');
+    const offersTab = document.querySelector('[data-tab="offers"]');
+    
+    if (tradeTab) {
+        tradeTab.style.opacity = '1';
+        tradeTab.style.cursor = 'pointer';
+        tradeTab.disabled = false;
+        tradeTab.title = '';
+    }
+    
+    if (offersTab) {
+        offersTab.style.opacity = '1';
+        offersTab.style.cursor = 'pointer';
+        offersTab.disabled = false;
+        offersTab.title = '';
+    }
+    
+    // Restore original trade content
+    const tradeContent = document.getElementById('tradeTab');
+    const offersContent = document.getElementById('offersTab');
+    
+    if (tradeContent && tradeContent.querySelector('.guest-feature-message')) {
+        tradeContent.innerHTML = `
+            <h2>🤝 Find Trade Matches</h2>
+            <div class="trade-matching-section">
+                <h3>Your ISO Pins (Wanted)</h3>
+                <div id="userISOPins" class="trade-pins-list">
+                    <p>Loading your ISO pins...</p>
+                </div>
+                
+                <h3>Collectors Who Have These Pins</h3>
+                <div id="tradeMatches" class="trade-matches-list">
+                    <p>Looking for matches...</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    if (offersContent && offersContent.querySelector('.guest-feature-message')) {
+        offersContent.innerHTML = `
+            <h2>💌 Trade Offers</h2>
+            
+            <div class="offers-section">
+                <h3>📨 Incoming Offers</h3>
+                <div id="incomingOffers" class="offers-list">
+                    <p>No incoming offers</p>
+                </div>
+            </div>
+            
+            <div class="offers-section">
+                <h3>📤 Outgoing Offers</h3>
+                <div id="outgoingOffers" class="offers-list">
+                    <p>No outgoing offers</p>
+                </div>
+            </div>
+        `;
+    }
 }
 
 /**
  * Update cloud sync status indicator
- * @param {string} status - 'connected', 'syncing', 'disconnected'
+ * @param {string} status - 'connected', 'syncing', 'disconnected', 'guest'
  */
 function updateSyncStatus(status) {
     const syncStatus = document.getElementById('syncStatus');
@@ -176,11 +594,15 @@ function updateSyncStatus(status) {
             syncStatus.innerHTML = '<span class="sync-icon">⚠️</span> Offline';
             syncStatus.style.color = '#dc3545';
             break;
+        case 'guest':
+            syncStatus.innerHTML = '<span class="sync-icon">🎮</span> Guest Mode (Local)';
+            syncStatus.style.color = '#17a2b8';
+            break;
     }
 }
 
 // ============================================
-// FIRESTORE DATA OPERATIONS
+// FIRESTORE DATA OPERATIONS (Modified for Guest)
 // ============================================
 
 /**
@@ -208,7 +630,7 @@ async function loadUserPinsFromFirestore() {
                 snapshot.forEach(doc => {
                     const pinData = doc.data();
                     pinsDatabase.push({
-                        id: parseInt(doc.id), // Store ID separately
+                        id: parseInt(doc.id),
                         ...pinData
                     });
                 });
@@ -246,13 +668,26 @@ async function loadUserPinsFromFirestore() {
  * @returns {Promise<boolean>} Success status
  */
 async function savePinToFirestore(pin) {
+    if (isGuestMode) {
+        // Guest mode - save to localStorage
+        const existingIndex = pinsDatabase.findIndex(p => p.id === pin.id);
+        if (existingIndex !== -1) {
+            pinsDatabase[existingIndex] = pin;
+        } else {
+            pinsDatabase.push(pin);
+        }
+        saveGuestPins();
+        refreshAllUI();
+        return true;
+    }
+    
     if (!currentUser) return false;
     
     updateSyncStatus('syncing');
     
     try {
         const pinData = { ...pin };
-        delete pinData.id; // Remove id from data (we use it as document ID)
+        delete pinData.id;
         
         pinData.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
         
@@ -279,6 +714,14 @@ async function savePinToFirestore(pin) {
  * @returns {Promise<boolean>} Success status
  */
 async function deletePinFromFirestore(pinId) {
+    if (isGuestMode) {
+        // Guest mode - remove from localStorage
+        pinsDatabase = pinsDatabase.filter(p => p.id !== pinId);
+        saveGuestPins();
+        refreshAllUI();
+        return true;
+    }
+    
     if (!currentUser) return false;
     
     updateSyncStatus('syncing');
@@ -392,28 +835,32 @@ async function addPinFromForm(event) {
     
     // Handle image upload if present
     if (imageFile) {
-        if (!currentUser) {
-            showNotification('Please login to upload images', 'error');
-            return;
-        }
-        
-        showLoadingOverlay(true);
-        
-        try {
-            const storageRef = storage.ref();
-            const fileExtension = imageFile.name.split('.').pop();
-            const fileName = `pins/${currentUser.uid}/${Date.now()}.${fileExtension}`;
-            const imageRef = storageRef.child(fileName);
+        if (isGuestMode) {
+            // Guest mode - handle locally
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                await processAndSave(e.target.result);
+            };
+            reader.readAsDataURL(imageFile);
+        } else if (currentUser) {
+            showLoadingOverlay(true);
             
-            const uploadTask = await imageRef.put(imageFile);
-            const downloadURL = await imageRef.getDownloadURL();
-            
-            await processAndSave(downloadURL);
-        } catch (error) {
-            console.error('Image upload failed:', error);
-            showNotification('Failed to upload image. Please try again.', 'error');
-        } finally {
-            showLoadingOverlay(false);
+            try {
+                const storageRef = storage.ref();
+                const fileExtension = imageFile.name.split('.').pop();
+                const fileName = `pins/${currentUser.uid}/${Date.now()}.${fileExtension}`;
+                const imageRef = storageRef.child(fileName);
+                
+                await imageRef.put(imageFile);
+                const downloadURL = await imageRef.getDownloadURL();
+                
+                await processAndSave(downloadURL);
+            } catch (error) {
+                console.error('Image upload failed:', error);
+                showNotification('Failed to upload image. Please try again.', 'error');
+            } finally {
+                showLoadingOverlay(false);
+            }
         }
     } else {
         // No image file, use URL or placeholder
@@ -1005,7 +1452,7 @@ async function importCollection(file) {
                 return;
             }
             
-            // Save each new pin to Firestore
+            // Save each new pin to Firestore or localStorage
             let successCount = 0;
             for (const pin of newPins) {
                 const success = await savePinToFirestore(pin);
@@ -1252,7 +1699,6 @@ async function respondToTrade(tradeId, response) {
         showNotification(`Trade ${response}!`, 'success');
         
         if (response === 'accepted') {
-            // TODO: Update pin ownership in database
             showNotification('Contact the trader to arrange shipping!', 'info');
         }
         
@@ -2304,11 +2750,15 @@ function setupEventListeners() {
             formTabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
             
-            document.getElementById('addPinTab').style.display = tabName === 'add' ? 'block' : 'none';
-            document.getElementById('tradeTab').style.display = tabName === 'trade' ? 'block' : 'none';
-            document.getElementById('offersTab').style.display = tabName === 'offers' ? 'block' : 'none';
+            const addPinTab = document.getElementById('addPinTab');
+            const tradeTab = document.getElementById('tradeTab');
+            const offersTab = document.getElementById('offersTab');
             
-            if (tabName === 'trade') {
+            if (addPinTab) addPinTab.style.display = tabName === 'add' ? 'block' : 'none';
+            if (tradeTab) tradeTab.style.display = tabName === 'trade' ? 'block' : 'none';
+            if (offersTab) offersTab.style.display = tabName === 'offers' ? 'block' : 'none';
+            
+            if (tabName === 'trade' && !isGuestMode) {
                 findTradeMatches();
             }
         });
@@ -2548,6 +2998,12 @@ async function logoutUser() {
 // ============================================
 // START THE APPLICATION
 // ============================================
+
+// Make functions available globally for HTML onclick handlers
+window.viewPinDetails = viewPinDetails;
+window.quickAddToCollection = quickAddToCollection;
+window.showAuthModalWithGuestOption = showAuthModalWithGuestOption;
+window.startGuestMode = startGuestMode;
 
 // Wait for DOM to load before initializing
 document.addEventListener('DOMContentLoaded', initializeApp);
