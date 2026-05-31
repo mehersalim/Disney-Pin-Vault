@@ -995,12 +995,28 @@ textarea {
     top: 0;
     width: 100%;
     height: 100%;
-    background-img: assets/014.jpg;
+    background-image: url('assets/014.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+/* Optional: Add a semi-transparent overlay over the background image */
+.modal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+/* Ensure modal content appears above the overlay */
 .modal-content {
     background: white;
     border-radius: var(--border-radius);
@@ -1010,6 +1026,8 @@ textarea {
     max-height: 90vh;
     overflow-y: auto;
     animation: slideDown 0.3s ease;
+    position: relative;
+    z-index: 2;
 }
 
 @keyframes slideDown {
