@@ -56,12 +56,34 @@
     --transition: all 0.3s ease;
 }
 
+/* NEW PINK BACKGROUND */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-    background: linear-gradient(135deg, var(--light-pink) 0%, var(--primary-pink) 100%);
+    background: #FDE8EC;
     min-height: 100vh;
     padding: 20px;
     color: var(--dark-gray);
+}
+
+/* Optional: Add a subtle pattern overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(var(--light-pink) 1px, transparent 1px);
+    background-size: 30px 30px;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Ensure content stays above background pattern */
+.app-header, .phase4-nav, .phase4-section, .modal-content {
+    position: relative;
+    z-index: 1;
 }
 
 /* ============================================ */
@@ -212,11 +234,12 @@ h3 {
 }
 
 .phase4-tab:hover {
-    background: var(--gray-light);
+    background: var(--light-pink);
+    color: var(--deep-purple);
 }
 
 .phase4-tab.active {
-    background: linear-gradient(135deg, var(--teal), var(--deep-purple));
+    background: linear-gradient(135deg, var(--accent-pink), var(--primary-pink));
     color: white;
 }
 
@@ -295,12 +318,15 @@ h3 {
 }
 
 .form-tab:hover {
-    background: var(--gray-light);
+    background: var(--light-pink);
+    color: var(--deep-purple);
 }
 
 .form-tab.active {
-    color: var(--teal);
-    background: rgba(2, 94, 115, 0.1);
+    color: var(--accent-pink);
+    background: rgba(242, 102, 153, 0.1);
+    border-bottom: 2px solid var(--accent-pink);
+    margin-bottom: -2px;
 }
 
 .form-tab-content {
@@ -319,7 +345,7 @@ h3 {
 
 .form-section h3 {
     margin-bottom: 1rem;
-    color: var(--teal);
+    color: var(--accent-pink);
     font-size: 1rem;
 }
 
@@ -403,7 +429,7 @@ textarea {
 }
 
 .suggestion-tag:hover {
-    background: var(--teal);
+    background: var(--accent-pink);
     color: white;
     transform: scale(1.05);
 }
@@ -423,7 +449,11 @@ textarea {
     border-radius: 8px;
 }
 
-/* Buttons */
+/* ============================================ */
+/* BUTTON STYLES - MATCHING COLOR SCHEME        */
+/* ============================================ */
+
+/* Primary Button - Teal and Deep Purple gradient */
 .btn-submit, .btn-primary {
     background: linear-gradient(135deg, var(--teal), var(--deep-purple));
     color: white;
@@ -440,8 +470,10 @@ textarea {
 .btn-submit:hover, .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, #037a8f, #402060);
 }
 
+/* Secondary Button - Peach color */
 .btn-secondary {
     background: var(--peach);
     color: white;
@@ -459,8 +491,9 @@ textarea {
     transform: translateY(-1px);
 }
 
+/* Cancel Button - Dark Gray */
 .btn-cancel {
-    background: var(--gray-dark);
+    background: var(--dark-gray);
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -476,6 +509,7 @@ textarea {
     background: #5a6268;
 }
 
+/* Small Button - Danger color */
 .btn-small {
     background: var(--danger);
     color: white;
@@ -484,6 +518,270 @@ textarea {
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.75rem;
+}
+
+.btn-small:hover {
+    background: #b71c1c;
+}
+
+/* Edit Button - Peach */
+.edit-pin-btn {
+    background: var(--peach);
+    color: white;
+    border: none;
+    padding: 0.4rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: var(--transition);
+}
+
+.edit-pin-btn:hover {
+    background: #e88a5d;
+}
+
+/* Delete Button - Danger */
+.delete-pin-btn {
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 0.4rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: var(--transition);
+}
+
+.delete-pin-btn:hover {
+    background: #b71c1c;
+}
+
+/* Google Button */
+.btn-google {
+    background: #db4437;
+    color: white;
+    border: none;
+    padding: 0.6rem;
+    border-radius: 40px;
+    width: 100%;
+    cursor: pointer;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.btn-google:hover {
+    background: #c33c2f;
+    transform: translateY(-1px);
+}
+
+/* Guest Button - Pink gradient */
+.btn-guest {
+    background: linear-gradient(135deg, var(--primary-pink), var(--accent-pink));
+    color: var(--deep-purple);
+    border: none;
+    padding: 0.6rem;
+    border-radius: 40px;
+    width: 100%;
+    cursor: pointer;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: var(--transition);
+}
+
+.btn-guest:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Capture Button */
+.btn-capture {
+    background: var(--success);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-capture:hover {
+    background: #1b5e20;
+    transform: translateY(-1px);
+}
+
+/* Trade Proposal Buttons */
+.btn-propose-trade, .btn-accept-offer {
+    background: var(--success);
+    color: white;
+    border: none;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: var(--transition);
+}
+
+.btn-propose-trade:hover, .btn-accept-offer:hover {
+    background: #1b5e20;
+}
+
+.btn-decline-offer {
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: var(--transition);
+}
+
+.btn-decline-offer:hover {
+    background: #b71c1c;
+}
+
+.btn-counter-offer {
+    background: var(--peach);
+    color: white;
+    border: none;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: var(--transition);
+}
+
+.btn-counter-offer:hover {
+    background: #e88a5d;
+}
+
+/* Upgrade Button */
+.btn-upgrade {
+    background: white;
+    color: var(--teal);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: var(--transition);
+}
+
+.btn-upgrade:hover {
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.btn-dismiss {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: var(--transition);
+}
+
+.btn-dismiss:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* Filter Buttons */
+.filter-btn {
+    padding: 0.4rem 1rem;
+    border: 2px solid var(--gray-medium);
+    background: white;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--dark-gray);
+}
+
+.filter-btn:hover {
+    background: var(--light-pink);
+    border-color: var(--accent-pink);
+}
+
+.filter-btn.active {
+    background: var(--teal);
+    color: white;
+    border-color: var(--teal);
+}
+
+/* Tag Filter Button */
+.tag-filter-btn {
+    background: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    border: 1px solid var(--gray-medium);
+    transition: var(--transition);
+    color: var(--dark-gray);
+}
+
+.tag-filter-btn:hover {
+    background: var(--accent-pink);
+    color: white;
+}
+
+.tag-filter-btn.active {
+    background: var(--deep-purple);
+    color: white;
+}
+
+.btn-clear-tags {
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    transition: var(--transition);
+}
+
+.btn-clear-tags:hover {
+    background: #b71c1c;
+}
+
+/* Marketplace Tab Buttons */
+.marketplace-tab {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: var(--gray-dark);
+    transition: var(--transition);
+}
+
+.marketplace-tab:hover {
+    color: var(--accent-pink);
+}
+
+.marketplace-tab.active {
+    color: var(--accent-pink);
+    border-bottom: 2px solid var(--accent-pink);
+}
+
+/* View Button */
+.btn-view {
+    display: inline-block;
+    margin-top: 10px;
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.btn-view:hover {
+    color: var(--accent-pink);
+    text-decoration: underline;
 }
 
 /* ============================================ */
@@ -596,34 +894,6 @@ textarea {
     margin-top: 0.75rem;
 }
 
-.edit-pin-btn, .delete-pin-btn {
-    flex: 1;
-    padding: 0.4rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.75rem;
-    transition: var(--transition);
-}
-
-.edit-pin-btn {
-    background: var(--peach);
-    color: white;
-}
-
-.edit-pin-btn:hover {
-    background: #e88a5d;
-}
-
-.delete-pin-btn {
-    background: var(--danger);
-    color: white;
-}
-
-.delete-pin-btn:hover {
-    background: #b71c1c;
-}
-
 /* ============================================ */
 /* SEARCH & FILTERS                             */
 /* ============================================ */
@@ -648,6 +918,12 @@ textarea {
     padding: 0.6rem 2rem 0.6rem 1rem;
     border: 2px solid var(--gray-medium);
     border-radius: 40px;
+    transition: var(--transition);
+}
+
+#searchInput:focus {
+    border-color: var(--accent-pink);
+    outline: none;
 }
 
 #clearSearchBtn {
@@ -662,30 +938,8 @@ textarea {
     color: var(--gray-dark);
 }
 
-.filter-buttons {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.filter-btn {
-    padding: 0.4rem 1rem;
-    border: 2px solid var(--gray-medium);
-    background: white;
-    border-radius: 40px;
-    cursor: pointer;
-    transition: var(--transition);
-    color: var(--dark-gray);
-}
-
-.filter-btn:hover {
-    background: var(--gray-light);
-}
-
-.filter-btn.active {
-    background: var(--teal);
-    color: white;
-    border-color: var(--teal);
+#clearSearchBtn:hover {
+    color: var(--danger);
 }
 
 /* Tags Filter Section */
@@ -720,42 +974,14 @@ textarea {
     font-weight: bold;
 }
 
+.remove-tag:hover {
+    opacity: 0.7;
+}
+
 .all-tags-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-}
-
-.tag-filter-btn {
-    background: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    border: 1px solid var(--gray-medium);
-    transition: var(--transition);
-    color: var(--dark-gray);
-}
-
-.tag-filter-btn:hover {
-    background: var(--teal);
-    color: white;
-}
-
-.tag-filter-btn.active {
-    background: var(--deep-purple);
-    color: white;
-}
-
-.btn-clear-tags {
-    background: var(--danger);
-    color: white;
-    border: none;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.75rem;
-    margin-top: 0.5rem;
 }
 
 /* ============================================ */
@@ -814,26 +1040,18 @@ textarea {
     margin: 0.5rem 0;
 }
 
-.btn-google {
-    background: #db4437;
-    color: white;
-    border: none;
-    padding: 0.6rem;
-    border-radius: 40px;
-    width: 100%;
-    cursor: pointer;
-    margin: 0.5rem 0;
-    font-size: 1rem;
-}
-
 .auth-switch {
     margin-top: 1rem;
     font-size: 0.85rem;
 }
 
 .auth-switch a {
-    color: var(--teal);
+    color: var(--accent-pink);
     text-decoration: none;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
 }
 
 .auth-features {
@@ -864,25 +1082,6 @@ textarea {
 
 .close-modal:hover {
     color: var(--dark-gray);
-}
-
-/* Guest Button */
-.btn-guest {
-    background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));
-    color: var(--deep-purple);
-    border: none;
-    padding: 0.6rem;
-    border-radius: 40px;
-    width: 100%;
-    cursor: pointer;
-    margin: 0.5rem 0;
-    font-size: 1rem;
-    font-weight: bold;
-}
-
-.btn-guest:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
 }
 
 /* ============================================ */
@@ -926,36 +1125,6 @@ textarea {
 .upgrade-card p {
     font-size: 0.75rem;
     margin-bottom: 1rem;
-}
-
-.btn-upgrade {
-    background: white;
-    color: var(--teal);
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-right: 0.5rem;
-}
-
-.btn-upgrade:hover {
-    transform: scale(1.02);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-.btn-dismiss {
-    background: transparent;
-    color: white;
-    border: 1px solid rgba(255,255,255,0.5);
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 0.75rem;
-}
-
-.btn-dismiss:hover {
-    background: rgba(255,255,255,0.1);
 }
 
 /* Guest Feature Message */
@@ -1054,15 +1223,6 @@ textarea {
     margin-top: 1rem;
 }
 
-.btn-capture {
-    background: var(--success);
-    color: white;
-    border: none;
-    padding: 0.6rem 1.5rem;
-    border-radius: 40px;
-    cursor: pointer;
-}
-
 #qrReader {
     width: 100%;
     max-width: 500px;
@@ -1109,6 +1269,7 @@ textarea {
     cursor: pointer;
     background: var(--teal);
     color: white;
+    transition: var(--transition);
 }
 
 .match-actions button:hover {
@@ -1299,31 +1460,6 @@ textarea {
     min-width: 200px;
 }
 
-.marketplace-tabs {
-    display: flex;
-    gap: 0.5rem;
-    border-bottom: 2px solid var(--gray-medium);
-    margin-bottom: 1.5rem;
-}
-
-.marketplace-tab {
-    background: none;
-    border: none;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    color: var(--gray-dark);
-    transition: var(--transition);
-}
-
-.marketplace-tab:hover {
-    color: var(--teal);
-}
-
-.marketplace-tab.active {
-    color: var(--teal);
-    border-bottom: 2px solid var(--teal);
-}
-
 .listings-grid {
     display: grid;
     gap: 1rem;
@@ -1431,29 +1567,6 @@ textarea {
     color: var(--teal);
 }
 
-.btn-propose-trade, .btn-accept-offer, .btn-decline-offer, .btn-counter-offer {
-    padding: 0.3rem 0.75rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.75rem;
-}
-
-.btn-propose-trade, .btn-accept-offer {
-    background: var(--success);
-    color: white;
-}
-
-.btn-decline-offer {
-    background: var(--danger);
-    color: white;
-}
-
-.btn-counter-offer {
-    background: var(--peach);
-    color: white;
-}
-
 /* ============================================ */
 /* NOTIFICATION TOAST                           */
 /* ============================================ */
@@ -1505,7 +1618,7 @@ textarea {
     width: 50px;
     height: 50px;
     border: 4px solid rgba(255,255,255,0.3);
-    border-top: 4px solid white;
+    border-top: 4px solid var(--accent-pink);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 1rem;
@@ -1601,6 +1714,10 @@ textarea {
     body {
         background: white;
         padding: 0;
+    }
+    
+    body::before {
+        display: none;
     }
     
     .phase4-nav, .add-pin-form, .btn-logout, .btn-cancel {
