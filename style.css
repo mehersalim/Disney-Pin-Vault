@@ -14,14 +14,14 @@
  * - Marketplace integration
  * - Responsive design
  * 
- * Color Scheme:
- * - Primary Purple: #764ba2
- * - Primary Blue: #667eea
- * - Success Green: #28a745
- * - Warning Yellow: #ffc107
- * - Danger Red: #dc3545
- * - Info Blue: #17a2b8
- * - Dark Text: #2d1b4e
+ * UPDATED COLOR SCHEME:
+ * - Primary Pink: #D99AAB
+ * - Accent Pink: #F26699
+ * - Light Pink: #F2A0C6
+ * - Teal: #025E73
+ * - Peach: #F29C6B
+ * - Dark Gray: #404E56
+ * - Deep Purple: #311C49
  */
 
 /* ============================================ */
@@ -35,16 +35,20 @@
 }
 
 :root {
-    --primary-purple: #764ba2;
-    --primary-blue: #667eea;
-    --primary-dark: #2d1b4e;
-    --success: #28a745;
-    --warning: #ffc107;
-    --danger: #dc3545;
-    --info: #17a2b8;
+    --primary-pink: #D99AAB;
+    --accent-pink: #F26699;
+    --light-pink: #F2A0C6;
+    --teal: #025E73;
+    --peach: #F29C6B;
+    --dark-gray: #404E56;
+    --deep-purple: #311C49;
+    --success: #2e7d32;
+    --warning: #ed6c02;
+    --danger: #d32f2f;
+    --info: #0288d1;
     --gray-light: #f5f5f5;
-    --gray-medium: #ddd;
-    --gray-dark: #666;
+    --gray-medium: #e0e0e0;
+    --gray-dark: #757575;
     --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
     --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
     --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
@@ -54,111 +58,64 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+    background: linear-gradient(135deg, var(--light-pink) 0%, var(--primary-pink) 100%);
     min-height: 100vh;
     padding: 20px;
-    color: #333;
+    color: var(--dark-gray);
 }
 
 /* ============================================ */
 /* GUEST MODE STYLES                            */
 /* ============================================ */
 
-/* Guest Button */
-.btn-guest {
-    background: linear-gradient(135deg, #17a2b8, #138496);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 40px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    margin: 10px 0;
-    transition: all 0.3s ease;
-}
-
-.btn-guest:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
-}
-
-/* Auth Separator */
-.auth-separator {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    color: var(--gray-dark);
-    font-size: 12px;
-    margin: 15px 0;
-}
-
-.auth-separator::before,
-.auth-separator::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid var(--gray-medium);
-}
-
-.auth-separator span {
-    margin: 0 10px;
-}
-
 /* Guest Badge */
 .guest-badge {
-    background: #17a2b8;
+    background: var(--peach);
     color: white;
-    padding: 4px 12px;
+    padding: 0.25rem 0.75rem;
     border-radius: 20px;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: bold;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
 }
 
 /* Guest Upgrade Prompt */
 .guest-upgrade-prompt {
-    margin-bottom: 20px;
-    animation: slideDown 0.3s ease;
+    margin-bottom: 1rem;
 }
 
 .upgrade-card {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, var(--teal), var(--deep-purple));
     color: white;
-    padding: 15px;
+    padding: 1rem;
     border-radius: 12px;
     text-align: center;
 }
 
 .upgrade-icon {
-    font-size: 32px;
+    font-size: 2rem;
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 0.5rem;
 }
 
 .upgrade-card h4 {
     color: white;
-    margin-bottom: 8px;
+    margin-bottom: 0.5rem;
 }
 
 .upgrade-card p {
-    font-size: 13px;
-    margin-bottom: 15px;
-    opacity: 0.9;
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
 }
 
 .btn-upgrade {
     background: white;
-    color: #764ba2;
+    color: var(--teal);
     border: none;
-    padding: 8px 16px;
+    padding: 0.5rem 1rem;
     border-radius: 25px;
     font-weight: bold;
     cursor: pointer;
-    margin-right: 8px;
-    transition: all 0.2s;
+    margin-right: 0.5rem;
 }
 
 .btn-upgrade:hover {
@@ -170,10 +127,10 @@ body {
     background: transparent;
     color: white;
     border: 1px solid rgba(255,255,255,0.5);
-    padding: 8px 16px;
+    padding: 0.5rem 1rem;
     border-radius: 25px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 .btn-dismiss:hover {
@@ -183,15 +140,15 @@ body {
 /* Guest Feature Message */
 .guest-feature-message {
     text-align: center;
-    padding: 40px 20px;
+    padding: 2rem;
     background: var(--gray-light);
     border-radius: var(--border-radius);
 }
 
 .feature-lock-icon {
-    font-size: 48px;
+    font-size: 3rem;
     display: block;
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
 }
 
 .guest-feature-message h3 {
@@ -224,7 +181,7 @@ body {
 /* ============================================ */
 
 h1, h2, h3, h4 {
-    color: var(--primary-dark);
+    color: var(--deep-purple);
 }
 
 h1 {
@@ -265,7 +222,7 @@ h3 {
 }
 
 .header-left h1 {
-    color: var(--primary-dark);
+    color: var(--deep-purple);
 }
 
 .sync-status {
@@ -274,7 +231,7 @@ h3 {
     gap: 0.25rem;
     font-size: 0.75rem;
     color: var(--success);
-    background: #d4edda;
+    background: #e8f5e9;
     padding: 0.25rem 0.5rem;
     border-radius: 20px;
 }
@@ -295,7 +252,7 @@ h3 {
     display: block;
     font-size: 1.2rem;
     font-weight: bold;
-    color: var(--primary-purple);
+    color: var(--teal);
 }
 
 .stat-label {
@@ -314,11 +271,12 @@ h3 {
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid var(--primary-purple);
+    border: 2px solid var(--accent-pink);
 }
 
 .user-name {
     font-weight: 500;
+    color: var(--deep-purple);
 }
 
 .btn-logout {
@@ -332,7 +290,7 @@ h3 {
 }
 
 .btn-logout:hover {
-    background: #c82333;
+    background: #b71c1c;
     transform: translateY(-1px);
 }
 
@@ -371,7 +329,7 @@ h3 {
 }
 
 .phase4-tab.active {
-    background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+    background: linear-gradient(135deg, var(--teal), var(--deep-purple));
     color: white;
 }
 
@@ -412,7 +370,7 @@ h3 {
 }
 
 .add-pin-form::-webkit-scrollbar-thumb {
-    background: var(--primary-purple);
+    background: var(--accent-pink);
     border-radius: 4px;
 }
 
@@ -454,8 +412,8 @@ h3 {
 }
 
 .form-tab.active {
-    color: var(--primary-purple);
-    background: rgba(118, 75, 162, 0.1);
+    color: var(--teal);
+    background: rgba(2, 94, 115, 0.1);
 }
 
 .form-tab-content {
@@ -474,7 +432,7 @@ h3 {
 
 .form-section h3 {
     margin-bottom: 1rem;
-    color: var(--primary-purple);
+    color: var(--teal);
     font-size: 1rem;
 }
 
@@ -497,7 +455,7 @@ label {
     margin-bottom: 0.25rem;
     font-size: 0.85rem;
     font-weight: 500;
-    color: var(--gray-dark);
+    color: var(--dark-gray);
 }
 
 input, select, textarea {
@@ -511,8 +469,8 @@ input, select, textarea {
 
 input:focus, select:focus, textarea:focus {
     outline: none;
-    border-color: var(--primary-purple);
-    box-shadow: 0 0 0 2px rgba(118, 75, 162, 0.1);
+    border-color: var(--accent-pink);
+    box-shadow: 0 0 0 2px rgba(242, 102, 153, 0.1);
 }
 
 textarea {
@@ -554,10 +512,11 @@ textarea {
     font-size: 0.75rem;
     cursor: pointer;
     transition: var(--transition);
+    color: var(--deep-purple);
 }
 
 .suggestion-tag:hover {
-    background: var(--primary-purple);
+    background: var(--teal);
     color: white;
     transform: scale(1.05);
 }
@@ -579,7 +538,7 @@ textarea {
 
 /* Buttons */
 .btn-submit, .btn-primary {
-    background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+    background: linear-gradient(135deg, var(--teal), var(--deep-purple));
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -597,7 +556,7 @@ textarea {
 }
 
 .btn-secondary {
-    background: var(--info);
+    background: var(--peach);
     color: white;
     border: none;
     padding: 0.5rem 1rem;
@@ -609,7 +568,7 @@ textarea {
 }
 
 .btn-secondary:hover {
-    background: #138496;
+    background: #e88a5d;
     transform: translateY(-1px);
 }
 
@@ -693,7 +652,7 @@ textarea {
 .pin-name {
     font-size: 1rem;
     font-weight: bold;
-    color: var(--primary-dark);
+    color: var(--deep-purple);
     margin-bottom: 0.5rem;
 }
 
@@ -711,8 +670,8 @@ textarea {
 }
 
 .pin-tag {
-    background: rgba(118, 75, 162, 0.1);
-    color: var(--primary-purple);
+    background: rgba(242, 102, 153, 0.1);
+    color: var(--accent-pink);
     padding: 0.15rem 0.5rem;
     border-radius: 12px;
     font-size: 0.7rem;
@@ -729,18 +688,18 @@ textarea {
 }
 
 .status-own {
-    background: #d4edda;
-    color: #155724;
+    background: #e8f5e9;
+    color: #2e7d32;
 }
 
 .status-trade {
-    background: #fff3cd;
-    color: #856404;
+    background: #fff3e0;
+    color: #ed6c02;
 }
 
 .status-iso {
-    background: #f8d7da;
-    color: #721c24;
+    background: #ffebee;
+    color: #c62828;
 }
 
 /* Card Buttons */
@@ -761,12 +720,12 @@ textarea {
 }
 
 .edit-pin-btn {
-    background: var(--warning);
-    color: #333;
+    background: var(peach);
+    color: #white;
 }
 
 .edit-pin-btn:hover {
-    background: #e0a800;
+    background: #e88a5d;
 }
 
 .delete-pin-btn {
@@ -775,7 +734,7 @@ textarea {
 }
 
 .delete-pin-btn:hover {
-    background: #c82333;
+    background: #b71c1c;
 }
 
 /* ============================================ */
@@ -829,6 +788,7 @@ textarea {
     border-radius: 40px;
     cursor: pointer;
     transition: var(--transition);
+    color: var(--dark-gray);
 }
 
 .filter-btn:hover {
@@ -836,9 +796,9 @@ textarea {
 }
 
 .filter-btn.active {
-    background: var(--primary-purple);
+    background: var(--teal);
     color: white;
-    border-color: var(--primary-purple);
+    border-color: var(--teal);
 }
 
 /* Tags Filter Section */
@@ -858,7 +818,7 @@ textarea {
 }
 
 .active-tag {
-    background: var(--primary-purple);
+    background: var(--teal);
     color: white;
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
@@ -887,15 +847,16 @@ textarea {
     cursor: pointer;
     border: 1px solid var(--gray-medium);
     transition: var(--transition);
+    color: var(--dark-gray);
 }
 
 .tag-filter-btn:hover {
-    background: var(--primary-purple);
+    background: var(--teal);
     color: white;
 }
 
 .tag-filter-btn.active {
-    background: var(--primary-dark);
+    background: var(--deep-purple);
     color: white;
 }
 
@@ -955,6 +916,7 @@ textarea {
 
 .auth-header h1 {
     margin-bottom: 0.5rem;
+    color: var(--deep-purple);
 }
 
 .auth-form {
@@ -983,7 +945,7 @@ textarea {
 }
 
 .auth-switch a {
-    color: var(--primary-purple);
+    color: var(--teal);
     text-decoration: none;
 }
 
@@ -1013,6 +975,20 @@ textarea {
     color: var(--gray-dark);
 }
 
+/* Guest Button */
+.btn-guest {
+    background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));
+    color: var(--deep-purple);
+    border: none;
+    padding: 0.6rem;
+    border-radius: 40px;
+    width: 100%;
+    cursor: pointer;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
 /* ============================================ */
 /* IMPORT/EXPORT SECTION                        */
 /* ============================================ */
@@ -1026,6 +1002,7 @@ textarea {
 .import-export-section h3 {
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
+    color: var(--teal);
 }
 
 .button-group {
@@ -1115,10 +1092,6 @@ textarea {
     border-radius: 8px;
 }
 
-.match-info {
-    flex: 1;
-}
-
 .match-actions {
     display: flex;
     gap: 0.5rem;
@@ -1135,9 +1108,9 @@ textarea {
 .confidence-warning {
     margin-top: 1rem;
     padding: 0.75rem;
-    background: #fff3cd;
+    background: #fff3e0;
     border-radius: 8px;
-    color: #856404;
+    color: #ed6c02;
 }
 
 .scanner-tips {
@@ -1171,7 +1144,7 @@ textarea {
 }
 
 .summary-card {
-    background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+    background: linear-gradient(135deg, var(--teal), var(--deep-purple));
     color: white;
     padding: 1rem;
     border-radius: var(--border-radius);
@@ -1243,9 +1216,9 @@ textarea {
 
 .insight-item {
     padding: 0.75rem;
-    background: #e8f4f8;
+    background: #e0f2f1;
     border-radius: 8px;
-    border-left: 4px solid var(--info);
+    border-left: 4px solid var(--teal);
 }
 
 .valuable-pins-list {
@@ -1265,10 +1238,16 @@ textarea {
 .valuable-pin-item .rank {
     font-size: 1.25rem;
     font-weight: bold;
-    color: var(--warning);
+    color: var(--peach);
     width: 40px;
 }
 
+.valuable-pin-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+}
 .valuable-pin-item img {
     width: 50px;
     height: 50px;
@@ -1333,12 +1312,12 @@ textarea {
 }
 
 .marketplace-tab:hover {
-    color: var(--primary-purple);
+    color: var(--teal);
 }
 
 .marketplace-tab.active {
-    color: var(--primary-purple);
-    border-bottom: 2px solid var(--primary-purple);
+    color: var(--teal);
+    border-bottom: 2px solid var(--teal);
 }
 
 .listings-grid {
@@ -1438,7 +1417,7 @@ textarea {
 
 .trade-user {
     font-weight: bold;
-    color: var(--primary-purple);
+    color: var(--teal);
 }
 
 .btn-propose-trade, .btn-accept-offer, .btn-decline-offer, .btn-counter-offer {
@@ -1460,7 +1439,7 @@ textarea {
 }
 
 .btn-counter-offer {
-    background: var(--warning);
+    background: var(peach);
     color: #333;
 }
 
@@ -1495,7 +1474,6 @@ textarea {
 /* ============================================ */
 /* LOADING OVERLAY                              */
 /* ============================================ */
-
 .loading-overlay {
     position: fixed;
     top: 0;
@@ -1643,3 +1621,12 @@ textarea {
 .mb-1 { margin-bottom: 0.5rem; }
 .mb-2 { margin-bottom: 1rem; }
 .mb-3 { margin-bottom: 1.5rem; }
+
+/* ============================================ */
+/* KEYFRAME ANIMATIONS                         */
+/* ============================================ */
+
+@keyframes highlight {
+    0% { background-color: var(--light-pink); transform: scale(1); }
+    100% { background-color: transparent; transform: scale(1); }
+}
