@@ -11,6 +11,14 @@
   - Phase 3: Firebase Auth, Cloud Sync, Trading System
   - Phase 4: AI Scanner, Analytics Dashboard, Marketplace Integration
   - NEW: Guest Mode - Try without signing up!
+  - Update Version 4.1.0: Color Scheme
+    - Primary Pink: #D99AAB
+    - Accent Pink: #F26699
+    - Light Pink: #F2A0C6
+    - Teal: #025E73
+    - Peach: #F29C6B
+    - Dark Gray: #404E56
+    - Deep Purple: #311C49
   
   Every feature is documented and ready to use.
 -->
@@ -20,9 +28,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="description" content="Disney Pin Vault - Track your pin collection, find trades, and discover pin values">
-    <meta name="theme-color" content="#764ba2">
+    <meta name="theme-color" content="#D99AAB">
     
-    <title>✨ Disney Pin Vault - Complete Collection Manager ✨</title>
+    <title>Disney Pin Vault - Complete Collection Manager</title>
     
     <!-- 
       EXTERNAL LIBRARIES
@@ -66,7 +74,7 @@
     <div id="authModal" class="modal" style="display: flex;">
         <div class="modal-content auth-modal">
             <div class="auth-header">
-                <h1>🏰 Disney Pin Vault</h1>
+                <h1>Disney Pin Vault</h1>
                 <p>Track, Trade, and Treasure Your Collection</p>
             </div>
             
@@ -95,14 +103,14 @@
             <!-- Guest button will be added by JavaScript dynamically -->
             
             <div class="auth-features">
-                <p>✨ Features include:</p>
+                <p>Features include:</p>
                 <ul>
-                    <li>📌 Track pins you own, want, or have for trade</li>
-                    <li>🤖 AI image recognition to identify pins</li>
-                    <li>📊 Analytics dashboard with value tracking</li>
-                    <li>🛒 Live eBay & Mercari price checks</li>
-                    <li>🎮 <strong>Try instantly as Guest - no signup required!</strong></li>
-                    <li>☁️ Create account to sync across all devices</li>
+                    <li>Track pins you own, want, or have for trade</li>
+                    <li>AI image recognition to identify pins</li>
+                    <li>Analytics dashboard with value tracking</li>
+                    <li>Live price checks</li>
+                    <li>Try instantly as Guest - no signup required</li>
+                    <li>Create account to sync across all devices</li>
                 </ul>
             </div>
         </div>
@@ -116,9 +124,9 @@
         <!-- HEADER with User Info & Stats -->
         <header class="app-header">
             <div class="header-left">
-                <h1>🏰 Disney Pin Vault</h1>
+                <h1>Disney Pin Vault</h1>
                 <div id="syncStatus" class="sync-status">
-                    <span class="sync-icon">☁️</span> Synced
+                    <span class="sync-icon">Synced</span>
                 </div>
             </div>
             
@@ -151,7 +159,7 @@
                 <div class="user-info">
                     <img id="userAvatar" class="user-avatar" src="https://via.placeholder.com/40" alt="Avatar">
                     <span id="userName" class="user-name">Collector</span>
-                    <button id="logoutBtn" class="btn-logout" title="Logout">🚪</button>
+                    <button id="logoutBtn" class="btn-logout" title="Logout">Logout</button>
                 </div>
             </div>
         </header>
@@ -159,16 +167,16 @@
         <!-- PHASE 4 NAVIGATION TABS -->
         <div class="phase4-nav">
             <button class="phase4-tab active" data-phase4="collection">
-                <span class="tab-icon">📌</span> My Collection
+                My Collection
             </button>
             <button class="phase4-tab" data-phase4="scanner">
-                <span class="tab-icon">🤖</span> AI Scanner
+                AI Scanner
             </button>
             <button class="phase4-tab" data-phase4="analytics">
-                <span class="tab-icon">📊</span> Analytics
+                Analytics
             </button>
             <button class="phase4-tab" data-phase4="marketplace">
-                <span class="tab-icon">🛒</span> Marketplace
+                Marketplace
             </button>
         </div>
         
@@ -181,20 +189,20 @@
                 <!-- LEFT SIDEBAR: Add/Edit Pin Form -->
                 <aside class="add-pin-form">
                     <div class="form-tabs">
-                        <button class="form-tab active" data-tab="add">➕ Add Pin</button>
-                        <button class="form-tab" data-tab="trade">🤝 Find Trades</button>
-                        <button class="form-tab" data-tab="offers">💌 Trade Offers</button>
+                        <button class="form-tab active" data-tab="add">Add Pin</button>
+                        <button class="form-tab" data-tab="trade">Find Trades</button>
+                        <button class="form-tab" data-tab="offers">Trade Offers</button>
                     </div>
                     
                     <!-- TAB 1: ADD/EDIT PIN -->
                     <div id="addPinTab" class="form-tab-content active">
-                        <h2 id="formTitle">➕ Add New Pin</h2>
+                        <h2 id="formTitle">Add New Pin</h2>
                         <input type="hidden" id="editingPinId" value="">
                         
                         <form id="pinForm">
                             <!-- Basic Information -->
                             <div class="form-section">
-                                <h3>📋 Basic Information</h3>
+                                <h3>Pin Info</h3>
                                 
                                 <div class="form-row">
                                     <div class="form-group">
@@ -228,7 +236,7 @@
                             
                             <!-- Release & Value -->
                             <div class="form-section">
-                                <h3>💰 Release & Value</h3>
+                                <h3>Release & Value</h3>
                                 
                                 <div class="form-row">
                                     <div class="form-group">
@@ -246,14 +254,16 @@
                                         <label for="origin">Origin</label>
                                         <select id="origin">
                                             <option value="">Select location...</option>
-                                            <option value="Disneyland California">🏰 Disneyland California</option>
-                                            <option value="Walt Disney World">🐭 Walt Disney World</option>
-                                            <option value="Disneyland Paris">🗼 Disneyland Paris</option>
-                                            <option value="Tokyo Disney">🗾 Tokyo Disney</option>
-                                            <option value="Hong Kong Disneyland">🐉 Hong Kong Disneyland</option>
-                                            <option value="Shanghai Disney">🏯 Shanghai Disney</option>
-                                            <option value="ShopDisney">📦 ShopDisney</option>
-                                            <option value="Other">✨ Other</option>
+                                            <option value="Disneyland California">Disneyland California</option>
+                                            <option value="Walt Disney World">Walt Disney World</option>
+                                            <option value="Disneyland Paris">Disneyland Paris</option>
+                                            <option value="Tokyo Disney">Tokyo Disney</option>
+                                            <option value="Hong Kong Disneyland">Hong Kong Disneyland</option>
+                                            <option value="Shanghai Disney">Shanghai Disney</option>
+                                            <option value="Disney Store">ShopDisney</option>
+                                            <option value="Mickey's of Glendale">Mickey's of Glendale</option>
+                                            <option value="Disney Employee Center">Disney Employee Center</option>
+                                            <option value="Other">Other</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -282,15 +292,15 @@
                             
                             <!-- Status -->
                             <div class="form-section">
-                                <h3>📌 Status</h3>
+                                <h3>Status</h3>
                                 
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="pinStatus">Pin Status</label>
                                         <select id="pinStatus">
-                                            <option value="own">✅ I own this</option>
-                                            <option value="trade">🔄 I have this for trade</option>
-                                            <option value="iso">🎯 I want this (ISO)</option>
+                                            <option value="own">I own this</option>
+                                            <option value="trade">I have this for trade</option>
+                                            <option value="iso">I want this (ISO)</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -307,14 +317,14 @@
                             
                             <!-- Tags -->
                             <div class="form-section">
-                                <h3>🏷️ Tags</h3>
+                                <h3>Tags</h3>
                                 <div class="form-group">
                                     <input type="text" id="pinTags" placeholder="Stitch, Glitter, Halloween, Limited Edition">
                                     <div class="tag-suggestions">
                                         <span class="suggestion-tag" data-tag="Stitch">Stitch</span>
                                         <span class="suggestion-tag" data-tag="Mickey">Mickey</span>
                                         <span class="suggestion-tag" data-tag="Minnie">Minnie</span>
-                                        <span class="suggestion-tag" data-tag="Glitter">✨ Glitter</span>
+                                        <span class="suggestion-tag" data-tag="Glitter">Glitter</span>
                                         <span class="suggestion-tag" data-tag="Chaser">Chaser</span>
                                         <span class="suggestion-tag" data-tag="LE">Limited Edition</span>
                                         <span class="suggestion-tag" data-tag="Holiday">Holiday</span>
@@ -324,7 +334,7 @@
                             
                             <!-- Image -->
                             <div class="form-section">
-                                <h3>🖼️ Pin Image</h3>
+                                <h3>Pin Image</h3>
                                 <div class="form-group">
                                     <label for="imageUpload">Upload from computer</label>
                                     <input type="file" id="imageUpload" accept="image/*">
@@ -333,14 +343,14 @@
                                     <input type="url" id="imageUrl" placeholder="https://example.com/pin.jpg">
                                     <div id="imagePreview" class="image-preview" style="display: none;">
                                         <img id="previewImg" src="" alt="Preview">
-                                        <button type="button" id="clearImageBtn" class="btn-small">✖ Remove</button>
+                                        <button type="button" id="clearImageBtn" class="btn-small">Remove</button>
                                     </div>
                                 </div>
                             </div>
                             
                             <!-- Authentication -->
                             <div class="form-section">
-                                <h3>⚠️ Authentication</h3>
+                                <h3>Authentication</h3>
                                 <label class="checkbox-label">
                                     <input type="checkbox" id="confirmedFakes"> Confirmed fakes/counterfeits exist for this pin
                                 </label>
@@ -350,14 +360,14 @@
                                 </div>
                             </div>
                             
-                            <button type="submit" class="btn-submit" id="submitBtn">✨ Add Pin to Collection ✨</button>
-                            <button type="button" class="btn-cancel" id="cancelEditBtn" style="display: none;">❌ Cancel Edit</button>
+                            <button type="submit" class="btn-submit" id="submitBtn">Add Pin to Collection</button>
+                            <button type="button" class="btn-cancel" id="cancelEditBtn" style="display: none;">Cancel Edit</button>
                         </form>
                     </div>
                     
                     <!-- TAB 2: FIND TRADES -->
                     <div id="tradeTab" class="form-tab-content" style="display: none;">
-                        <h2>🤝 Find Trade Matches</h2>
+                        <h2>Find Trade Matches</h2>
                         <div class="trade-matching-section">
                             <h3>Your ISO Pins (Wanted)</h3>
                             <div id="userISOPins" class="trade-pins-list">
@@ -373,17 +383,17 @@
                     
                     <!-- TAB 3: TRADE OFFERS -->
                     <div id="offersTab" class="form-tab-content" style="display: none;">
-                        <h2>💌 Trade Offers</h2>
+                        <h2>Trade Offers</h2>
                         
                         <div class="offers-section">
-                            <h3>📨 Incoming Offers</h3>
+                            <h3>Incoming Offers</h3>
                             <div id="incomingOffers" class="offers-list">
                                 <p>No incoming offers</p>
                             </div>
                         </div>
                         
                         <div class="offers-section">
-                            <h3>📤 Outgoing Offers</h3>
+                            <h3>Outgoing Offers</h3>
                             <div id="outgoingOffers" class="offers-list">
                                 <p>No outgoing offers</p>
                             </div>
@@ -392,10 +402,10 @@
                     
                     <!-- Import/Export Section -->
                     <div class="import-export-section">
-                        <h3>💾 Backup & Transfer</h3>
+                        <h3>Backup & Transfer</h3>
                         <div class="button-group">
-                            <button id="exportBtn" class="btn-secondary">📥 Export Collection (JSON)</button>
-                            <label for="importFile" class="btn-secondary">📤 Import Collection</label>
+                            <button id="exportBtn" class="btn-secondary">Export Collection (JSON)</button>
+                            <label for="importFile" class="btn-secondary">Import Collection</label>
                             <input type="file" id="importFile" accept=".json" style="display: none;">
                         </div>
                         <small>Export your collection to backup or transfer to another device</small>
@@ -405,18 +415,18 @@
                 <!-- RIGHT CONTENT: Pins Display Grid -->
                 <section class="pins-display">
                     <div class="pins-header">
-                        <h2>📌 My Pin Collection</h2>
+                        <h2>My Pin Collection</h2>
                         
                         <div class="search-box">
-                            <input type="text" id="searchInput" placeholder="🔍 Search pins by name, collection, series, or tags...">
+                            <input type="text" id="searchInput" placeholder="Search pins by name, collection, series, or tags...">
                             <button id="clearSearchBtn" class="btn-clear-search" aria-label="Clear search">✖</button>
                         </div>
                         
                         <div class="filter-buttons" id="filterButtons">
                             <button class="filter-btn active" data-filter="all">All</button>
-                            <button class="filter-btn" data-filter="own">✅ Own</button>
-                            <button class="filter-btn" data-filter="trade">🔄 For Trade</button>
-                            <button class="filter-btn" data-filter="iso">🎯 ISO</button>
+                            <button class="filter-btn" data-filter="own">Own</button>
+                            <button class="filter-btn" data-filter="trade">For Trade</button>
+                            <button class="filter-btn" data-filter="iso">ISO</button>
                         </div>
                     </div>
                     
@@ -430,7 +440,7 @@
                     
                     <!-- Pins Grid Container -->
                     <div id="pinsGrid" class="pins-grid">
-                        <p class="placeholder-text">✨ No pins yet. Add your first Disney pin! ✨</p>
+                        <p class="placeholder-text">No pins yet. Add your first Disney pin!</p>
                     </div>
                 </section>
                 
@@ -443,14 +453,14 @@
         <div id="scannerSection" class="phase4-section" style="display: none;">
             <div class="scanner-container">
                 <div class="scanner-header">
-                    <h2>🤖 AI Pin Scanner</h2>
+                    <h2>AI Pin Scanner</h2>
                     <p>Take a photo or upload an image and our AI will identify the pin from your collection</p>
                 </div>
                 
                 <div class="scanner-options">
-                    <button id="startCameraBtn" class="btn-primary">📷 Start Camera</button>
-                    <button id="uploadImageBtn" class="btn-secondary">📤 Upload Photo</button>
-                    <button id="scanQRBtn" class="btn-secondary">🔍 Scan QR/Barcode</button>
+                    <button id="startCameraBtn" class="btn-primary">Start Camera</button>
+                    <button id="uploadImageBtn" class="btn-secondary">Upload Photo</button>
+                    <button id="scanQRBtn" class="btn-secondary">Scan QR/Barcode</button>
                 </div>
                 
                 <!-- Camera Preview -->
@@ -458,7 +468,7 @@
                     <video id="cameraVideo" autoplay playsinline></video>
                     <canvas id="scannerCanvas" style="display: none;"></canvas>
                     <div class="camera-controls">
-                        <button id="capturePhotoBtn" class="btn-capture">📸 Capture Photo</button>
+                        <button id="capturePhotoBtn" class="btn-capture">Capture Photo</button>
                         <button id="stopCameraBtn" class="btn-cancel">Stop Camera</button>
                     </div>
                 </div>
@@ -474,13 +484,13 @@
                 
                 <!-- AI Results -->
                 <div id="aiResults" class="ai-results" style="display: none;">
-                    <h3>🤖 AI Identification Results</h3>
+                    <h3>AI Identification Results</h3>
                     <div id="matchedPins" class="matched-pins"></div>
                     <div id="confidenceWarning" class="confidence-warning"></div>
                 </div>
                 
                 <div class="scanner-tips">
-                    <h4>💡 Tips for best results:</h4>
+                    <h4>Tips for best results:</h4>
                     <ul>
                         <li>Use good lighting (natural light works best)</li>
                         <li>Hold the pin flat and centered in frame</li>
@@ -496,31 +506,31 @@
         <!-- ============================================ -->
         <div id="analyticsSection" class="phase4-section" style="display: none;">
             <div class="analytics-dashboard">
-                <h2>📊 Collection Analytics</h2>
+                <h2>Collection Analytics</h2>
                 
                 <!-- Summary Cards -->
                 <div class="analytics-summary">
                     <div class="summary-card">
-                        <div class="summary-icon">💰</div>
+                        <div class="summary-icon">$</div>
                         <h4>Total Collection Value</h4>
                         <div class="summary-value" id="totalValue">$0</div>
                         <div class="summary-change" id="valueChange">+0% from last month</div>
                     </div>
                     
                     <div class="summary-card">
-                        <div class="summary-icon">⭐</div>
+                        <div class="summary-icon">Average</div>
                         <h4>Average Pin Value</h4>
                         <div class="summary-value" id="avgValue">$0</div>
                     </div>
                     
                     <div class="summary-card">
-                        <div class="summary-icon">🏆</div>
+                        <div class="summary-icon">Rare</div>
                         <h4>Rarest Pin</h4>
                         <div class="summary-value" id="rarestPin">None</div>
                     </div>
                     
                     <div class="summary-card">
-                        <div class="summary-icon">📊</div>
+                        <div class="summary-icon">Complete</div>
                         <h4>Collection Completion</h4>
                         <div class="summary-value" id="completionRate">0%</div>
                         <div class="progress-bar">
@@ -554,19 +564,19 @@
                 
                 <!-- AI Insights -->
                 <div class="insights-section">
-                    <h3>💡 AI Collection Insights</h3>
+                    <h3>Collection Insights</h3>
                     <div id="insightsList" class="insights-list"></div>
                 </div>
                 
                 <!-- Most Valuable Pins -->
                 <div class="valuable-pins-section">
-                    <h3>🏆 Most Valuable Pins</h3>
+                    <h3>Most Valuable Pins</h3>
                     <div id="mostValuablePins" class="valuable-pins-list"></div>
                 </div>
                 
                 <!-- Completion Recommendations -->
                 <div class="recommendations-section">
-                    <h3>🎯 Series Completion Recommendations</h3>
+                    <h3>Series Completion Recommendations</h3>
                     <div id="completionRecommendations" class="recommendations-list"></div>
                 </div>
             </div>
@@ -577,7 +587,7 @@
         <!-- ============================================ -->
         <div id="marketplaceSection" class="phase4-section" style="display: none;">
             <div class="marketplace-container">
-                <h2>🛒 Marketplace Integration</h2>
+                <h2>Marketplace Integration</h2>
                 <p>Compare prices across eBay and Mercari, view sold listings, and track price history</p>
                 
                 <!-- Pin Selector -->
@@ -586,7 +596,7 @@
                     <select id="marketplacePinSelect">
                         <option value="">-- Select a pin from your collection --</option>
                     </select>
-                    <button id="searchMarketplaceBtn" class="btn-primary">🔍 Search Listings</button>
+                    <button id="searchMarketplaceBtn" class="btn-primary">Search Listings</button>
                 </div>
                 
                 <!-- Marketplace Tabs -->
