@@ -8,10 +8,14 @@
  * 
  * HOW IT WORKS:
  * 1. Loads MobileNet (lightweight image classification model)
- * 2. Extracts feature vectors (embeddings) from pin images
- * 3. Compares uploaded images to database using cosine similarity
- * 4. Returns matches with confidence scores
- * 
+ * 2. Extracts a 1024-number embedding (feature vector) from each pin image
+ * 3. Compares the scanned image to the pins in YOUR collection using cosine similarity
+ * 4. Returns matches ranked by similarity score
+ *
+ * NOTE: MobileNet was trained on generic ImageNet photos, not Disney pins.
+ * Scores are a similarity ranking within your own collection, not a guarantee
+ * of identification. See README for measured accuracy.
+ *
  * REQUIREMENTS:
  * - TensorFlow.js library loaded in HTML
  * - MobileNet model (loaded automatically from CDN)
@@ -77,32 +81,30 @@ class PinRecognizer {
     }
     
     /**
-     * Extract feature vector (embeddings) from an image
-     * MobileNet returns logits (class probabilities) that we use as features
-     * @param {HTMLImageElement|HTMLVideoElement} imageElement 
-     * @returns {Promise<Float32Array>} Feature vector
+     * Extract an embedding (1024 numbers) from an image.
+     * Passing `true` to infer() returns the embedding layer instead of
+     * the 1000 ImageNet class probabilities.
+     * @param {HTMLImageElement|HTMLVideoElement} imageElement
+     * @returns {Promise<Float32Array>} Embedding vector
      */
     async extractFeatures(imageElement) {
         if (!this.isModelReady) {
             await this.loadModel();
         }
-        
+
+        let embedding;
         try {
-            // Use the model's inference to get features
-            // 'conv_preds' gives us the embedding layer
-            const features = await this.model.infer(imageElement, { 
-                activation: 'softmax' 
-            });
-            
-            // Convert to standard array for storage
-            return features.dataSync();
-            
+            embedding = this.model.infer(imageElement, true);
+            // Copy the values out, then free the tensor to avoid a memory leak
+            return await embedding.data();
         } catch (error) {
             console.error('Feature extraction failed:', error);
             throw error;
+        } finally {
+            if (embedding) embedding.dispose();
         }
     }
-    
+
     /**
      * Preprocess image for model input
      * Resizes to 224x224 and center crops to maintain aspect ratio
@@ -148,10 +150,11 @@ class PinRecognizer {
     
     /**
      * Calculate cosine similarity between two feature vectors
-     * Range: -1 (opposite) to 1 (identical)
+     * Range: -1 (opposite) to 1 (identical). MobileNet embeddings are
+     * non-negative, so scores here land between 0 and 1.
      * @param {Float32Array|Array} features1 
      * @param {Float32Array|Array} features2 
-     * @returns {number} Similarity score (0-1, normalized)
+     * @returns {number} Raw cosine similarity
      */
     cosineSimilarity(features1, features2) {
         let dotProduct = 0;
@@ -169,9 +172,7 @@ class PinRecognizer {
         
         if (magnitude1 === 0 || magnitude2 === 0) return 0;
         
-        // Normalize to 0-1 range (cosine similarity is -1 to 1)
-        const rawSimilarity = dotProduct / (magnitude1 * magnitude2);
-        return (rawSimilarity + 1) / 2; // Convert to 0-1 range
+        return dotProduct / (magnitude1 * magnitude2);
     }
     
     /**
@@ -252,7 +253,7 @@ class PinRecognizer {
                 matches.push({
                     pin: pin,
                     confidence: similarity,
-                    confidencePercent: Math.round(similarity * 100)
+                    confidencePercent: Math.max(0, Math.round(similarity * 100))
                 });
             }
         }
@@ -261,6 +262,12 @@ class PinRecognizer {
         matches.sort((a, b) => b.confidence - a.confidence);
         
         console.log(`✅ Found ${matches.length} matches. Top confidence: ${matches[0]?.confidencePercent || 0}%`);
+
+        // Debug view: see the top 5 raw scores (used to tune the thresholds)
+        console.table(matches.slice(0, 5).map(m => ({
+            pin: m.pin.name,
+            similarity: m.confidence.toFixed(3)
+        })));
         
         return matches;
     }
@@ -286,16 +293,19 @@ class PinRecognizer {
      * @returns {Object} { text, color }
      */
     getConfidenceLabel(confidence) {
-        if (confidence > 0.85) {
+        // Provisional thresholds from a small test: the exact same photo scored
+        // 1.00, while different pins and a new photo of the same pin scored ~0.59-0.67.
+        // To be re-tuned after the larger accuracy evaluation.
+        if (confidence > 0.90) {
             return { text: '🎯 Very High Match', color: '#28a745' };
         }
-        if (confidence > 0.70) {
+        if (confidence > 0.80) {
             return { text: '✅ Good Match', color: '#17a2b8' };
         }
-        if (confidence > 0.50) {
+        if (confidence > 0.70) {
             return { text: '🤔 Possible Match', color: '#ffc107' };
         }
-        if (confidence > 0.30) {
+        if (confidence > 0.50) {
             return { text: '⚠️ Low Confidence', color: '#fd7e14' };
         }
         return { text: '❌ No Match Found', color: '#dc3545' };
