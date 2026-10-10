@@ -1088,7 +1088,7 @@ function createPinCard(pin) {
     
     card.innerHTML = `
         <div class="pin-image-container">
-            <img class="pin-image" src="${pin.imageUrl}" alt="${escapeHtml(pin.name)}" 
+            <img class="pin-image" src="${safeImageUrl(pin.imageUrl)}" alt="${escapeHtml(pin.name)}" 
                  onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'">
         </div>
         <div class="pin-info">
@@ -1096,7 +1096,7 @@ function createPinCard(pin) {
             ${pin.collection ? `<div class="pin-details">📁 ${escapeHtml(pin.collection)}</div>` : ''}
             ${pin.series ? `<div class="pin-details">📚 ${escapeHtml(pin.series)} ${seriesText}</div>` : ''}
             ${pin.editionSize ? `<div class="pin-details">🔢 ${escapeHtml(pin.editionSize)}</div>` : ''}
-            ${pin.rarity !== 'Common' ? `<div class="pin-details">⭐ ${pin.rarity}</div>` : ''}
+            ${pin.rarity !== 'Common' ? `<div class="pin-details">⭐ ${escapeHtml(pin.rarity)}</div>` : ''}
             ${valueHtml}
             ${fakeWarning}
             ${tagsHtml}
@@ -1516,7 +1516,7 @@ async function findTradeMatches() {
     // Display user's ISO pins
     isoContainer.innerHTML = isoPins.map(pin => `
         <div class="pin-select-item">
-            <img src="${pin.imageUrl}" alt="${escapeHtml(pin.name)}" onerror="this.src='https://via.placeholder.com/40'">
+            <img src="${safeImageUrl(pin.imageUrl)}" alt="${escapeHtml(pin.name)}" onerror="this.src='https://via.placeholder.com/40'">
             <div>
                 <strong>${escapeHtml(pin.name)}</strong>
                 <small>${escapeHtml(pin.collection || '')}</small>
@@ -1575,7 +1575,7 @@ async function findTradeMatches() {
             <div class="trade-match-card">
                 <div class="trade-match-header">
                     <span class="trade-user">👤 ${escapeHtml(match.userName)}</span>
-                    <button class="btn-propose-trade" data-userid="${match.userId}">💌 Propose Trade</button>
+                    <button class="btn-propose-trade" data-userid="${escapeHtml(match.userId)}">💌 Propose Trade</button>
                 </div>
                 <div class="match-details">
                     <strong>Has for trade:</strong>
@@ -1663,13 +1663,13 @@ async function displayIncomingOffers(snapshot) {
             <div class="trade-match-header">
                 <span class="trade-user">From: ${escapeHtml(offer.senderName)}</span>
                 <div class="offer-buttons">
-                    <button class="btn-accept-offer" data-offerid="${offer.id}">✅ Accept</button>
-                    <button class="btn-decline-offer" data-offerid="${offer.id}">❌ Decline</button>
+                    <button class="btn-accept-offer" data-offerid="${escapeHtml(offer.id)}">✅ Accept</button>
+                    <button class="btn-decline-offer" data-offerid="${escapeHtml(offer.id)}">❌ Decline</button>
                 </div>
             </div>
             <div><strong>They offer:</strong> ${offer.offeredPins.map(p => `<span class="pin-tag">${escapeHtml(p.name)}</span>`).join('')}</div>
             <div><strong>They want:</strong> ${offer.requestedPins.map(p => `<span class="pin-tag">${escapeHtml(p.name)}</span>`).join('')}</div>
-            <div><small>Status: ${offer.status}</small></div>
+            <div><small>Status: ${escapeHtml(offer.status)}</small></div>
         </div>
     `).join('');
     
@@ -1728,8 +1728,8 @@ function openTradeProposalModal(targetUserId) {
                 <div id="myTradePins" class="trade-pins-list">
                     ${tradePins.length === 0 ? '<p>You have no pins marked "For Trade"</p>' : 
                         tradePins.map(pin => `
-                            <div class="pin-select-item" data-pinid="${pin.id}" data-type="my">
-                                <img src="${pin.imageUrl}" onerror="this.src='https://via.placeholder.com/40'">
+                            <div class="pin-select-item" data-pinid="${escapeHtml(pin.id)}" data-type="my">
+                                <img src="${safeImageUrl(pin.imageUrl)}" onerror="this.src='https://via.placeholder.com/40'">
                                 <div>
                                     <strong>${escapeHtml(pin.name)}</strong>
                                     <small>${escapeHtml(pin.collection || '')}</small>
@@ -1835,8 +1835,8 @@ async function loadUserTradePins(userId) {
             container.innerHTML = '<p>This collector has no pins marked "For Trade"</p>';
         } else {
             container.innerHTML = pins.map(pin => `
-                <div class="pin-select-item" data-pinid="${pin.id}" data-type="their">
-                    <img src="${pin.imageUrl}" onerror="this.src='https://via.placeholder.com/40'">
+                <div class="pin-select-item" data-pinid="${escapeHtml(pin.id)}" data-type="their">
+                    <img src="${safeImageUrl(pin.imageUrl)}" onerror="this.src='https://via.placeholder.com/40'">
                     <div>
                         <strong>${escapeHtml(pin.name)}</strong>
                         <small>${escapeHtml(pin.collection || '')}</small>
@@ -2073,7 +2073,7 @@ function generateInsights(ownedPins, totalValue) {
         insights.push(`✨ Your pins average $${avgValue.toFixed(0)} each - impressive collection!`);
     }
     
-    insightsDiv.innerHTML = insights.map(insight => `<div class="insight-item">${insight}</div>`).join('');
+    insightsDiv.innerHTML = insights.map(insight => `<div class="insight-item">${escapeHtml(insight)}</div>`).join('');
 }
 
 /**
@@ -2091,7 +2091,7 @@ function displayMostValuablePins(ownedPins) {
     container.innerHTML = valuable.map((pin, index) => `
         <div class="valuable-pin-item">
             <div class="rank">#${index + 1}</div>
-            <img src="${pin.imageUrl}" alt="${escapeHtml(pin.name)}" onerror="this.src='https://via.placeholder.com/50'">
+            <img src="${safeImageUrl(pin.imageUrl)}" alt="${escapeHtml(pin.name)}" onerror="this.src='https://via.placeholder.com/50'">
             <div class="valuable-info">
                 <strong>${escapeHtml(pin.name)}</strong>
                 <small>${escapeHtml(pin.collection || '')}</small>
@@ -2261,7 +2261,7 @@ function displayAIResults(matches) {
         const confidenceLabel = pinRecognizer.getConfidenceLabel(match.confidence);
         return `
             <div class="match-card" style="border-left: 4px solid ${confidenceLabel.color}">
-                <img src="${match.pin.imageUrl}" alt="${match.pin.name}" onerror="this.src='https://via.placeholder.com/80'">
+                <img src="${safeImageUrl(match.pin.imageUrl)}" alt="${escapeHtml(match.pin.name)}" onerror="this.src='https://via.placeholder.com/80'">
                 <div class="match-info">
                     <strong>${escapeHtml(match.pin.name)}</strong>
                     <div>Confidence: ${match.confidencePercent}%</div>
@@ -2472,16 +2472,16 @@ function displayEBayListings(listings) {
     
     container.innerHTML = listings.map(listing => `
         <div class="listing-card">
-            <img src="${listing.imageUrl}" alt="${listing.title}" onerror="this.src='https://via.placeholder.com/80'">
+            <img src="${safeImageUrl(listing.imageUrl)}" alt="${escapeHtml(listing.title)}" onerror="this.src='https://via.placeholder.com/80'">
             <div class="listing-info">
                 <h4>${escapeHtml(listing.title)}</h4>
                 <div class="listing-price">$${listing.price}</div>
                 <div class="listing-details">
-                    <span>${listing.condition}</span>
+                    <span>${escapeHtml(listing.condition)}</span>
                     <span>Shipping: $${listing.shipping}</span>
-                    <span>Seller: ${listing.seller}</span>
+                    <span>Seller: ${escapeHtml(listing.seller)}</span>
                 </div>
-                <a href="${listing.url}" target="_blank" class="btn-view" rel="noopener noreferrer">View on eBay →</a>
+                <a href="${escapeHtml(listing.url)}" target="_blank" class="btn-view" rel="noopener noreferrer">View on eBay →</a>
             </div>
         </div>
     `).join('');
@@ -2506,11 +2506,11 @@ function displayMercariListings(listings) {
                 <h4>${escapeHtml(listing.title)}</h4>
                 <div class="listing-price">$${listing.price}</div>
                 <div class="listing-details">
-                    <span>${listing.condition}</span>
+                    <span>${escapeHtml(listing.condition)}</span>
                     <span>❤️ ${listing.likes} likes</span>
-                    <span>${listing.location}</span>
+                    <span>${escapeHtml(listing.location)}</span>
                 </div>
-                <a href="${listing.url}" target="_blank" class="btn-view" rel="noopener noreferrer">View on Mercari →</a>
+                <a href="${escapeHtml(listing.url)}" target="_blank" class="btn-view" rel="noopener noreferrer">View on Mercari →</a>
             </div>
         </div>
     `).join('');
@@ -2673,10 +2673,37 @@ function closeModal(modalId) {
  * @returns {string} Escaped text
  */
 function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    if (text === null || text === undefined) return '';
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+    return String(text).replace(/[&<>"']/g, ch => map[ch]);
+}
+
+// Shown whenever a pin has no usable image (Day 4 swaps this for an inline SVG)
+const NO_IMAGE_URL = 'https://via.placeholder.com/200x200?text=No+Image';
+
+/**
+ * Make an image URL safe to put inside src="...".
+ * Allows only https: URLs and base64 data:image URLs (png/jpeg/gif/webp/avif/bmp/heic/heif;
+ * HEIC is what iPhone photos upload as).
+ * Anything else (javascript:, http:, garbage) becomes the fallback image.
+ * The result is already escaped, so it is safe inside an HTML attribute.
+ * @param {string} url
+ * @param {string} [fallback]
+ * @returns {string}
+ */
+function safeImageUrl(url, fallback = NO_IMAGE_URL) {
+    if (typeof url !== 'string') return fallback;
+    const value = url.trim();
+    if (/^data:image\/(png|jpe?g|gif|webp|avif|bmp|heic|heif);base64,[a-z0-9+/=]+$/i.test(value)) {
+        return escapeHtml(value);
+    }
+    try {
+        const parsed = new URL(value);
+        if (parsed.protocol === 'https:') return escapeHtml(parsed.href);
+    } catch (e) {
+        // not a valid URL: fall through
+    }
+    return fallback;
 }
 
 // ============================================
