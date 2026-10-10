@@ -15,6 +15,10 @@
  * The mock data demonstrates the functionality patterns.
  */
 
+// Flip to false only after real eBay/Mercari calls are implemented.
+// While true, every listing, sold comp and prediction is SIMULATED.
+const USE_MOCK_DATA = true;
+
 class PriceAPI {
     constructor() {
         // In production, you would set these from environment variables
@@ -22,14 +26,27 @@ class PriceAPI {
         this.mercariToken = 'MOCK_MERCARI_TOKEN';
         this.cache = new Map(); // Cache results to avoid repeated API calls
         this.cacheTimeout = 5 * 60 * 1000; // 5 minutes cache
+        this.isMock = USE_MOCK_DATA;
+        if (USE_MOCK_DATA) console.warn('PriceAPI: running in DEMO mode. All marketplace data is simulated.');
     }
     
+    /**
+     * Live marketplace data is not implemented yet. If USE_MOCK_DATA is turned
+     * off, fail loudly instead of silently returning fake data.
+     */
+    assertLiveDataAvailable() {
+        if (!USE_MOCK_DATA) {
+            throw new Error('Live marketplace data is not implemented yet. Set USE_MOCK_DATA = true for demo mode.');
+        }
+    }
+
     /**
      * Search eBay for active listings of a pin
      * @param {string} pinName - Name of the pin to search
      * @returns {Promise<Array>} List of listings
      */
     async searchEBay(pinName) {
+        this.assertLiveDataAvailable();
         if (!pinName) return [];
         
         // Check cache
@@ -84,6 +101,7 @@ class PriceAPI {
      * @returns {Promise<Array>}
      */
     async searchMercari(pinName) {
+        this.assertLiveDataAvailable();
         if (!pinName) return [];
         
         const cacheKey = `mercari_${pinName.toLowerCase()}`;
@@ -122,6 +140,7 @@ class PriceAPI {
      * @returns {Promise<Array>} Historical sales data
      */
     async getSoldComps(pinName) {
+        this.assertLiveDataAvailable();
         if (!pinName) return [];
         
         const cacheKey = `sold_${pinName.toLowerCase()}`;

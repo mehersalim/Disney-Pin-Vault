@@ -1975,3 +1975,19 @@ textarea {
     0% { background-color: var(--light-pink); transform: scale(1); }
     100% { background-color: transparent; transform: scale(1); }
 }
+
+/* Marks features that run on simulated data */
+.demo-badge {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    vertical-align: middle;
+    color: #7a4b00;
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 999px;
+}

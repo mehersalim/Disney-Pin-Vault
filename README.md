@@ -8,6 +8,8 @@ A full-featured web application for Disney pin collectors to track, trade, and t
 
 ## Features
 
+> **Status:** Collection management, search, trading and cloud sync are working features. The Marketplace panel and the "Value Over Time" chart currently run on **simulated demo data** (labeled in the app). Live eBay/Mercari integration is planned.
+
 ### Collection Management
 - Add, edit, and delete pins with detailed information
 - Track pins by status: Own, For Trade, or ISO (In Search Of)
@@ -20,33 +22,34 @@ A full-featured web application for Disney pin collectors to track, trade, and t
 - Filter by custom tags
 - Sort and organize your collection
 
-### AI Pin Scanner (Phase 4)
+### AI Pin Scanner
 - Take photos or upload images to identify pins
 - TensorFlow.js MobileNet for image recognition
 - Confidence scores for matches
 - QR/Barcode scanning for pin packaging
 
-### Analytics Dashboard (Phase 4)
-- Total collection value tracking
+### Analytics Dashboard
+- Total collection value (from the values you enter)
 - Rarity distribution charts
 - Origin breakdown
 - Most valuable pins ranking
 - Series completion tracking
-- AI-generated collection insights
+- Collection insights generated from your data
+- *Demo data:* the "Value Over Time" chart uses simulated history (real snapshots planned)
 
-### Marketplace Integration (Phase 4)
-- Real-time eBay and Mercari listings
-- Sold/completed comps for price comparison
-- Price history charts with trend analysis
-- Future value predictions
+### Marketplace Preview (Demo mode: simulated data)
+- Simulated eBay and Mercari listings, sold comps, and price history to demonstrate the UI
+- Trend analysis and a simple linear-regression projection, run on the simulated data (not financial advice)
+- Live marketplace integration is planned; it needs a server-side API key
+- Controlled by `USE_MOCK_DATA` in `price-api.js`
 
-### Trading System (Phase 3)
+### Trading System
 - Find collectors with your ISO pins
 - Propose and respond to trade offers
 - Real-time trade notifications
 - Offer management dashboard
 
-### Cloud Sync (Phase 3)
+### Cloud Sync
 - Firebase authentication (Email/Google)
 - Cross-device synchronization
 - Offline support with auto-sync
