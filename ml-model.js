@@ -224,7 +224,7 @@ class PinRecognizer {
             // Check if we have cached features for this pin
             let pinFeatures = this.featureCache.get(pin.id);
             
-            if (!pinFeatures && pin.imageUrl && pin.imageUrl !== 'https://via.placeholder.com/200x200?text=No+Image') {
+            if (!pinFeatures && pin.imageUrl && !pin.imageUrl.includes('via.placeholder.com') && !pin.imageUrl.startsWith('data:image/svg+xml')) {
                 try {
                     // Load and extract pin image features
                     const pinImg = await this.loadImage(pin.imageUrl);
