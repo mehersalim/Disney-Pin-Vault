@@ -226,7 +226,7 @@ async function startGuestMode() {
 function updateGuestModeUI() {
     // Update user info display
     document.getElementById('userName').textContent = 'Guest User';
-    document.getElementById('userAvatar').src = 'https://via.placeholder.com/40?text=👤';
+    document.getElementById('userAvatar').src = makePlaceholderImage('👤', '#764ba2');
     
     // Add guest indicator badge
     const headerRight = document.querySelector('.header-right');
@@ -392,7 +392,7 @@ function getSampleGuestData() {
             purchasePrice: 45.00,
             conditionNotes: "Mint condition, original backing card",
             tags: ["Stitch", "Hawaii", "Surf", "Summer", "LE"],
-            imageUrl: "https://via.placeholder.com/200x200/764ba2/white?text=Stitch+Sample",
+            imageUrl: makePlaceholderImage("Stitch Sample", "#764ba2"),
             confirmedFakes: false,
             fakeNotes: "",
             dateAdded: new Date().toISOString()
@@ -414,7 +414,7 @@ function getSampleGuestData() {
             purchasePrice: 12.99,
             conditionNotes: "New in package",
             tags: ["Mickey", "Halloween", "Holiday", "Pumpkin"],
-            imageUrl: "https://via.placeholder.com/200x200/ff6b6b/white?text=Mickey+Sample",
+            imageUrl: makePlaceholderImage("Mickey Sample", "#ff6b6b"),
             confirmedFakes: false,
             fakeNotes: "",
             dateAdded: new Date().toISOString()
@@ -436,7 +436,7 @@ function getSampleGuestData() {
             purchasePrice: 0,
             conditionNotes: "",
             tags: ["Jasmine", "Princess", "Chaser", "Grail", "LE500"],
-            imageUrl: "https://via.placeholder.com/200x200/ffd700/white?text=Jasmine+Sample",
+            imageUrl: makePlaceholderImage("Jasmine Sample", "#e0a800"),
             confirmedFakes: true,
             fakeNotes: "Many fakes on eBay - check for glitter eyes",
             dateAdded: new Date().toISOString()
@@ -495,7 +495,7 @@ function updateUserInterface(user) {
     if (user.photoURL) {
         document.getElementById('userAvatar').src = user.photoURL;
     } else {
-        document.getElementById('userAvatar').src = 'https://via.placeholder.com/40?text=' + userName.charAt(0).toUpperCase();
+        document.getElementById('userAvatar').src = makePlaceholderImage(userName.charAt(0).toUpperCase(), '#764ba2');
     }
     
     // Remove guest badge if exists
@@ -786,7 +786,7 @@ async function addPinFromForm(event) {
             purchasePrice: parseFloat(document.getElementById('purchasePrice').value) || 0,
             conditionNotes: document.getElementById('conditionNotes').value,
             tags: tags,
-            imageUrl: imageUrl || 'https://via.placeholder.com/200x200?text=No+Image',
+            imageUrl: imageUrl || NO_IMAGE_URL,
             confirmedFakes: document.getElementById('confirmedFakes').checked,
             fakeNotes: document.getElementById('fakeNotes').value,
             dateAdded: new Date().toISOString()
@@ -925,7 +925,7 @@ function editPinById(id) {
     document.getElementById('fakeNotes').value = pin.fakeNotes || '';
     
     // Show image preview
-    if (pin.imageUrl && pin.imageUrl !== 'https://via.placeholder.com/200x200?text=No+Image') {
+    if (!isPlaceholderImage(pin.imageUrl)) {
         document.getElementById('imagePreview').style.display = 'block';
         document.getElementById('previewImg').src = pin.imageUrl;
     }
@@ -1089,7 +1089,7 @@ function createPinCard(pin) {
     card.innerHTML = `
         <div class="pin-image-container">
             <img class="pin-image" src="${safeImageUrl(pin.imageUrl)}" alt="${escapeHtml(pin.name)}" 
-                 onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'">
+                 onerror="this.onerror=null;this.src='${NO_IMAGE_URL}'">
         </div>
         <div class="pin-info">
             <div class="pin-name">${escapeHtml(pin.name)}</div>
@@ -1516,7 +1516,7 @@ async function findTradeMatches() {
     // Display user's ISO pins
     isoContainer.innerHTML = isoPins.map(pin => `
         <div class="pin-select-item">
-            <img src="${safeImageUrl(pin.imageUrl)}" alt="${escapeHtml(pin.name)}" onerror="this.src='https://via.placeholder.com/40'">
+            <img src="${safeImageUrl(pin.imageUrl)}" alt="${escapeHtml(pin.name)}" onerror="this.onerror=null;this.src='${NO_IMAGE_URL}'">
             <div>
                 <strong>${escapeHtml(pin.name)}</strong>
                 <small>${escapeHtml(pin.collection || '')}</small>
@@ -1729,7 +1729,7 @@ function openTradeProposalModal(targetUserId) {
                     ${tradePins.length === 0 ? '<p>You have no pins marked "For Trade"</p>' : 
                         tradePins.map(pin => `
                             <div class="pin-select-item" data-pinid="${escapeHtml(pin.id)}" data-type="my">
-                                <img src="${safeImageUrl(pin.imageUrl)}" onerror="this.src='https://via.placeholder.com/40'">
+                                <img src="${safeImageUrl(pin.imageUrl)}" onerror="this.onerror=null;this.src='${NO_IMAGE_URL}'">
                                 <div>
                                     <strong>${escapeHtml(pin.name)}</strong>
                                     <small>${escapeHtml(pin.collection || '')}</small>
@@ -1836,7 +1836,7 @@ async function loadUserTradePins(userId) {
         } else {
             container.innerHTML = pins.map(pin => `
                 <div class="pin-select-item" data-pinid="${escapeHtml(pin.id)}" data-type="their">
-                    <img src="${safeImageUrl(pin.imageUrl)}" onerror="this.src='https://via.placeholder.com/40'">
+                    <img src="${safeImageUrl(pin.imageUrl)}" onerror="this.onerror=null;this.src='${NO_IMAGE_URL}'">
                     <div>
                         <strong>${escapeHtml(pin.name)}</strong>
                         <small>${escapeHtml(pin.collection || '')}</small>
@@ -2091,7 +2091,7 @@ function displayMostValuablePins(ownedPins) {
     container.innerHTML = valuable.map((pin, index) => `
         <div class="valuable-pin-item">
             <div class="rank">#${index + 1}</div>
-            <img src="${safeImageUrl(pin.imageUrl)}" alt="${escapeHtml(pin.name)}" onerror="this.src='https://via.placeholder.com/50'">
+            <img src="${safeImageUrl(pin.imageUrl)}" alt="${escapeHtml(pin.name)}" onerror="this.onerror=null;this.src='${NO_IMAGE_URL}'">
             <div class="valuable-info">
                 <strong>${escapeHtml(pin.name)}</strong>
                 <small>${escapeHtml(pin.collection || '')}</small>
@@ -2261,7 +2261,7 @@ function displayAIResults(matches) {
         const confidenceLabel = pinRecognizer.getConfidenceLabel(match.confidence);
         return `
             <div class="match-card" style="border-left: 4px solid ${confidenceLabel.color}">
-                <img src="${safeImageUrl(match.pin.imageUrl)}" alt="${escapeHtml(match.pin.name)}" onerror="this.src='https://via.placeholder.com/80'">
+                <img src="${safeImageUrl(match.pin.imageUrl)}" alt="${escapeHtml(match.pin.name)}" onerror="this.onerror=null;this.src='${NO_IMAGE_URL}'">
                 <div class="match-info">
                     <strong>${escapeHtml(match.pin.name)}</strong>
                     <div>Confidence: ${match.confidencePercent}%</div>
@@ -2472,7 +2472,7 @@ function displayEBayListings(listings) {
     
     container.innerHTML = listings.map(listing => `
         <div class="listing-card">
-            <img src="${safeImageUrl(listing.imageUrl)}" alt="${escapeHtml(listing.title)}" onerror="this.src='https://via.placeholder.com/80'">
+            <img src="${safeImageUrl(listing.imageUrl)}" alt="${escapeHtml(listing.title)}" onerror="this.onerror=null;this.src='${NO_IMAGE_URL}'">
             <div class="listing-info">
                 <h4>${escapeHtml(listing.title)}</h4>
                 <div class="listing-price">$${listing.price}</div>
@@ -2678,13 +2678,33 @@ function escapeHtml(text) {
     return String(text).replace(/[&<>"']/g, ch => map[ch]);
 }
 
-// Shown whenever a pin has no usable image (Day 4 swaps this for an inline SVG)
-const NO_IMAGE_URL = 'https://via.placeholder.com/200x200?text=No+Image';
+/**
+ * Build a small placeholder image as an inline SVG data URI.
+ * No external website needed, so it never breaks.
+ * @param {string} label - Short text shown in the image
+ * @param {string} bg - Background color
+ * @returns {string} data URI usable as an <img> src
+ */
+function makePlaceholderImage(label = 'No Image', bg = '#b9a7d9') {
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">'
+        + '<rect width="200" height="200" fill="' + bg + '"/>'
+        + '<text x="100" y="108" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" text-anchor="middle">'
+        + escapeHtml(label) + '</text></svg>';
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+// Shown whenever a pin has no usable image
+const NO_IMAGE_URL = makePlaceholderImage('No Image');
+
+// True for the old via.placeholder.com images and our own SVG placeholders
+function isPlaceholderImage(url) {
+    return !url || url.includes('via.placeholder.com') || url.startsWith('data:image/svg+xml');
+}
 
 /**
  * Make an image URL safe to put inside src="...".
- * Allows only https: URLs and base64 data:image URLs (png/jpeg/gif/webp/avif/bmp/heic/heif;
- * HEIC is what iPhone photos upload as).
+ * Allows only https: URLs, base64 data:image URLs (png/jpeg/gif/webp/avif/bmp/heic/heif;
+ * HEIC is what iPhone photos upload as) and our own encoded SVG placeholders.
  * Anything else (javascript:, http:, garbage) becomes the fallback image.
  * The result is already escaped, so it is safe inside an HTML attribute.
  * @param {string} url
@@ -2695,6 +2715,10 @@ function safeImageUrl(url, fallback = NO_IMAGE_URL) {
     if (typeof url !== 'string') return fallback;
     const value = url.trim();
     if (/^data:image\/(png|jpe?g|gif|webp|avif|bmp|heic|heif);base64,[a-z0-9+/=]+$/i.test(value)) {
+        return escapeHtml(value);
+    }
+    // Our own SVG placeholders: strictly URL-encoded, so no raw < > or quotes can get through
+    if (/^data:image\/svg\+xml;charset=utf-8,[a-z0-9%._~!*'()-]+$/i.test(value)) {
         return escapeHtml(value);
     }
     try {

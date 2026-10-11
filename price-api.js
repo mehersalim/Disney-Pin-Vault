@@ -79,7 +79,7 @@ class PriceAPI {
                         condition: this.getRandomCondition(),
                         seller: `disney_trader_${Math.floor(Math.random() * 1000)}`,
                         url: `https://ebay.com/mock-listing-${i}`,
-                        imageUrl: `https://via.placeholder.com/100?text=${encodeURIComponent(pinName.substring(0, 10))}`,
+                        imageUrl: '', // demo listings have no photo; the UI shows a local placeholder
                         endTime: new Date(Date.now() + (Math.random() * 14 + 1) * 24 * 60 * 60 * 1000).toISOString(),
                         bidding: Math.random() > 0.7,
                         bids: Math.floor(Math.random() * 15)
