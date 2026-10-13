@@ -398,3 +398,8 @@ class PriceAPI {
 
 // Create global instance
 const priceAPI = new PriceAPI();
+
+// Lets tests import the class in Node. In the browser `module` doesn't exist, so this is skipped.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { PriceAPI };
+}
