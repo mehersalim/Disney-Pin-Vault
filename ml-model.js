@@ -336,7 +336,14 @@ class PinRecognizer {
 // Create global instance for use throughout the app
 const pinRecognizer = new PinRecognizer();
 
-// Auto-load model in background (don't block UI)
-pinRecognizer.loadModel().catch(err => {
-    console.warn('Background model load failed:', err);
-});
+// Auto-load model in background (don't block UI). Skipped outside the browser (e.g. tests).
+if (typeof window !== 'undefined') {
+    pinRecognizer.loadModel().catch(err => {
+        console.warn('Background model load failed:', err);
+    });
+}
+
+// Lets tests import the class in Node. In the browser `module` doesn't exist, so this is skipped.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { PinRecognizer };
+}

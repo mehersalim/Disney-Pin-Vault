@@ -1,0 +1,27 @@
+{
+  "name": "disney-pin-vault",
+  "version": "1.0.0",
+  "description": "[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Firebase](https://img.shields.io/badge/firebase-ready-orange.svg)](https://firebase.google.com) [![TensorFlow](https://img.shields.io/badge/TensorFlow.js-AI-purple.svg)](https://www.tensorflow.org/js)",
+  "main": "chart-config.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mehersalim/Disney-Pin-Vault.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mehersalim/Disney-Pin-Vault/issues"
+  },
+  "homepage": "https://github.com/mehersalim/Disney-Pin-Vault#readme",
+  "devDependencies": {
+    "eslint": "^10.12.0",
+    "vitest": "^5.0.4"
+  }
+}
