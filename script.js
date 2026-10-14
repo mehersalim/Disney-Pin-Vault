@@ -2004,7 +2004,7 @@ function generateValueHistory(ownedPins) {
         
         let total = 0;
         ownedPins.forEach(pin => {
-            let value = pin.currentValue || pin.purchasePrice || 0;
+            const value = pin.currentValue || pin.purchasePrice || 0;
             // Simulate slight variation for demo
             const variance = 0.95 + (Math.random() * 0.1);
             total += value * variance;

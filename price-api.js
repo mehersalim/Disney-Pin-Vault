@@ -165,7 +165,7 @@ class PriceAPI {
                     
                     // Add some random variation
                     const variation = 0.85 + (Math.random() * 0.3);
-                    let price = basePrice * Math.pow(trend, i) * variation;
+                    const price = basePrice * Math.pow(trend, i) * variation;
                     
                     comps.push({
                         date: date.toISOString().split('T')[0],

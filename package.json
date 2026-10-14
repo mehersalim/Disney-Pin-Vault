@@ -7,7 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "vitest run"
+    "test": "vitest run",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -21,7 +22,9 @@
   },
   "homepage": "https://github.com/mehersalim/Disney-Pin-Vault#readme",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "eslint": "^10.12.0",
+    "globals": "^17.13.0",
     "vitest": "^5.0.4"
   }
 }

@@ -1,5 +1,6 @@
 # 🏰 Disney Pin Vault
 
+[![CI](https://github.com/mehersalim/Disney-Pin-Vault/actions/workflows/ci.yml/badge.svg)](https://github.com/mehersalim/Disney-Pin-Vault/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Firebase](https://img.shields.io/badge/firebase-ready-orange.svg)](https://firebase.google.com)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow.js-AI-purple.svg)](https://www.tensorflow.org/js)
@@ -76,6 +77,7 @@ A web app for Disney pin collectors to track, trade, and treasure their collecti
 ### Prerequisites
 - A modern browser (Chrome, Firefox, Safari)
 - Git
+- Node.js 22 or newer, to run the tests and linter (`npm install`, then `npm test` and `npm run lint`)
 - Python 3 or Node.js, only to run a local server (optional)
 - A free Firebase account, only if you want accounts, cloud sync, and trading (optional)
 
@@ -105,11 +107,15 @@ Firebase web config values are not secrets, but your security rules are what pro
 ├── script.js           # App logic (auth, pins, trades, analytics UI)
 ├── ml-model.js         # TensorFlow.js pin scanner
 ├── price-api.js        # Marketplace price module (demo/simulated data)
+├── validate-import.js  # Checks and cleans backup files before import
 ├── chart-config.js     # Chart.js chart builders
 ├── firebase-config.js  # Firebase setup (placeholder values)
 ├── firestore.rules     # Database security rules
 ├── storage.rules       # Photo storage security rules
 ├── sample-pins.json    # Sample data for testing import
+├── tests/              # Automated tests (Vitest)
+├── eslint.config.mjs   # Lint rules (ESLint)
+├── .github/workflows/  # CI: runs lint and tests on every push
 ├── docs/               # README screenshots
 └── LICENSE
 ```
@@ -122,11 +128,11 @@ This is a learning project, and I'd rather list what doesn't work yet than overc
 - **The scanner is a prototype.** It uses a general-purpose image model that wasn't trained on pins, and it only matches against pins already in your collection. In informal testing with three photos, the exact same photo scored 100%, but a new photo of the same pin scored about the same as different pins, likely because textured backgrounds dominate the score. A proper accuracy evaluation is planned.
 - **Trading hasn't been tested end-to-end.** Collector discovery in particular needs user profile records the app doesn't create yet.
 - **Guest-mode storage is small.** Guest data lives in browser storage (about 5 MB), and photos are saved at full size, so a handful of large photos can fill it. Resizing on upload is planned.
-- **No automated tests yet,** and `script.js` is one large file.
+- **Test coverage is still small** (scanner math, price trends, import checking), and `script.js` is one large file.
 
 ## Roadmap
 
-- [ ] Automated tests and CI
+- [x] Automated tests and CI (more coverage planned)
 - [ ] Split `script.js` into modules
 - [ ] Measure scanner accuracy and improve photo matching
 - [ ] Save real collection-value snapshots over time
