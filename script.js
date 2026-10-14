@@ -1430,17 +1430,14 @@ async function importCollection(file) {
     
     reader.onload = async (e) => {
         try {
-            const importedPins = JSON.parse(e.target.result);
-            
-            if (!Array.isArray(importedPins)) {
-                throw new Error('Invalid format: expected array');
+            // Check and clean the file first (see validate-import.js)
+            const result = validateImport(e.target.result);
+            if (!result.ok) {
+                throw new Error(result.errors[0]);
             }
-            
-            // Validate each pin has required fields
-            const validPins = importedPins.filter(pin => pin.name && pin.id);
-            
-            if (validPins.length === 0) {
-                throw new Error('No valid pins found in file');
+            const validPins = result.pins;
+            if (result.skipped.length > 0) {
+                console.warn(`Skipped ${result.skipped.length} invalid pins:`, result.skipped);
             }
             
             // Check for duplicates by ID
@@ -1459,11 +1456,12 @@ async function importCollection(file) {
                 if (success) successCount++;
             }
             
-            showNotification(`📤 Imported ${successCount} new pins!`, 'success');
+            const skippedNote = result.skipped.length > 0 ? ` (${result.skipped.length} invalid skipped)` : '';
+            showNotification(`📤 Imported ${successCount} new pins!${skippedNote}`, 'success');
             
         } catch (error) {
             console.error('Import error:', error);
-            showNotification('Invalid JSON file. Please check the format.', 'error');
+            showNotification(`Import failed: ${error.message}`, 'error');
         }
     };
     
