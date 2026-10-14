@@ -122,8 +122,8 @@ class PinRecognizer {
         canvas.height = targetSize;
         
         // Get source dimensions
-        let sourceWidth = input.width || input.videoWidth;
-        let sourceHeight = input.height || input.videoHeight;
+        const sourceWidth = input.width || input.videoWidth;
+        const sourceHeight = input.height || input.videoHeight;
         
         if (sourceWidth === 0 || sourceHeight === 0) {
             throw new Error('Invalid image dimensions');
