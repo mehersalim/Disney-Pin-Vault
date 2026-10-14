@@ -276,7 +276,10 @@ class PriceAPI {
         const residuals = prices.map((y, i) => Math.abs(y - (slope * i + intercept)));
         const avgResidual = residuals.reduce((a, b) => a + b, 0) / n;
         const priceRange = Math.max(...prices) - Math.min(...prices);
-        const confidence = Math.min(85, Math.max(50, 100 - (avgResidual / priceRange * 100)));
+        // Flat prices fit the line perfectly (and dividing by a zero range would give NaN)
+        const confidence = priceRange === 0
+            ? 85
+            : Math.min(85, Math.max(50, 100 - (avgResidual / priceRange * 100)));
         
         return {
             predictions: predictions,
