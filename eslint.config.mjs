@@ -18,7 +18,22 @@ const sharedGlobals = {
     priceAPI: 'readonly',
     pinRecognizer: 'readonly',
     analyticsCharts: 'readonly',
-    validateImport: 'readonly'
+    validateImport: 'readonly',
+    // helpers in js/utils.js
+    escapeHtml: 'readonly',
+    showNotification: 'readonly',
+    showLoadingOverlay: 'readonly',
+    closeModal: 'readonly',
+    makePlaceholderImage: 'readonly',
+    isPlaceholderImage: 'readonly',
+    safeImageUrl: 'readonly',
+    NO_IMAGE_URL: 'readonly',
+    // backup and restore in js/storage.js
+    exportCollection: 'readonly',
+    importCollection: 'readonly',
+    // defined in script.js, used by js/storage.js
+    pinsDatabase: 'writable',
+    savePinToFirestore: 'readonly'
 };
 
 export default [
@@ -26,7 +41,7 @@ export default [
     js.configs.recommended,
     {
         // Browser scripts
-        files: ['*.js'],
+        files: ['*.js', 'js/**/*.js'],
         languageOptions: {
             sourceType: 'script',
             globals: { ...globals.browser, ...sharedGlobals, module: 'writable' }

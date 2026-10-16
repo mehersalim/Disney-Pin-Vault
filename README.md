@@ -104,7 +104,10 @@ Firebase web config values are not secrets, but your security rules are what pro
 ```
 ├── index.html          # App layout and pages
 ├── style.css           # Styling
-├── script.js           # App logic (auth, pins, trades, analytics UI)
+├── script.js           # Main app logic (auth, pins, trades, analytics UI)
+├── js/
+│   ├── utils.js        # Shared helpers: notifications, escaping, safe image URLs
+│   └── storage.js      # Backup and restore (JSON export/import)
 ├── ml-model.js         # TensorFlow.js pin scanner
 ├── price-api.js        # Marketplace price module (demo/simulated data)
 ├── validate-import.js  # Checks and cleans backup files before import
